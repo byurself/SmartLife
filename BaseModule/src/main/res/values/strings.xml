@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">BaseModule</string>
+
+    <string name="LackCamera">缺少摄像头访问权限</string>
+    <string name="LackCalendar">缺少读写日历权限</string>
+    <string name="LackCantacts">缺少读写联系人权限</string>
+    <string name="LackLocation">缺少位置服务访问权限</string>
+    <string name="LackMicrophone">缺少话筒（拾音器）访问权限</string>
+    <string name="LackPhone">缺少访问/获取电话的权限</string>
+    <string name="LackSensors">缺少使用传感器权限</string>
+    <string name="LackSms">缺少短信读写权限</string>
+    <string name="LackExternalStorage">缺少读写SD卡的权限</string>
+
+
+    <string name="PermissionWarning">缺少相关权限</string>
+    <string name="Quit">退出</string>
+    <string name="Settings">设置</string>
+    <string name="OK">确定</string>
+</resources>
