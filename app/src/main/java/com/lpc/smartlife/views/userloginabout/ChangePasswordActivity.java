@@ -1,4 +1,4 @@
-package com.lpc.smartlife.userloginabout;
+package com.lpc.smartlife.views.userloginabout;
 
 import androidx.appcompat.widget.Toolbar;
 
@@ -19,19 +19,17 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-public class RegisterActivity extends BaseActivity {
+public class ChangePasswordActivity extends BaseActivity {
 
     EditText editTextAccount;
     EditText editTextPassword;
-    EditText editTextPassword2;
-    EditText editTextCode;
-    Button btnGetCode;
-    Button btnUserRegister;
+    EditText editTextNewPassword;
+    Button btnChangePassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register);
+        setContentView(R.layout.activity_change_password);
 
         setImmersiveWindows();
         initToolbar();
@@ -41,46 +39,29 @@ public class RegisterActivity extends BaseActivity {
     public void initViews() {
         editTextAccount = findViewById(R.id.editTextAccount);
         editTextPassword = findViewById(R.id.editTextPassword);
-        editTextPassword2 = findViewById(R.id.editTextPassword2);
-        editTextCode = findViewById(R.id.editTextCode);
-        btnGetCode = findViewById(R.id.btnGetCode);
-        btnUserRegister = findViewById(R.id.btnUserRegister);
+        editTextNewPassword = findViewById(R.id.editTextCode);
+        btnChangePassword = findViewById(R.id.btnChangePassword);
 
         editTextPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-        editTextPassword2.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        editTextNewPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
 
-        /**
-         * 获取验证码
-         */
-        btnGetCode.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getVCode();
-            }
-        });
-
-        /**
-         * 提交修改
-         */
-        btnUserRegister.setOnClickListener(new View.OnClickListener() {
+        btnChangePassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (editTextAccount.getText().toString().trim().length() == 0) {
-                    Tools.displayToast(RegisterActivity.this, "账号不能为空");
+                    Tools.displayToast(ChangePasswordActivity.this, "账号不能为空");
                 } else if (editTextPassword.getText().toString().trim().length() == 0) {
-                    Tools.displayToast(RegisterActivity.this, "密码不能为空");
-                } else if (!editTextPassword.getText().toString().trim().equals(editTextPassword2.getText().toString().trim())) {
-                    Tools.displayToast(RegisterActivity.this, "两次密码不一致");
-                } else if (editTextCode.getText().toString().trim().length() == 0) {
-                    Tools.displayToast(RegisterActivity.this, "验证码不能为空");
+                    Tools.displayToast(ChangePasswordActivity.this, "原密码不能为空");
+                } else if (editTextNewPassword.getText().toString().trim().length() == 0) {
+                    Tools.displayToast(ChangePasswordActivity.this, "新密码不能为空");
                 } else {
-                    doRegister();
+                    doChangePassword();
                 }
             }
         });
     }
 
-    private void doRegister() {
+    public void doChangePassword() {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -88,26 +69,10 @@ public class RegisterActivity extends BaseActivity {
                 JSONObject json = new JSONObject();
                 json.put("userId", editTextAccount.getText().toString());
                 json.put("password", editTextPassword.getText().toString());
-                json.put("vcode", editTextCode.getText().toString());
-                String response = connection.doPost("http://ysdk.kystu.cn/api/userRegister/", json);
-                LoginEventMessage message = JSONObject.parseObject(response, LoginEventMessage.class);
-                message.setFlag(0);
-                EventBus.getDefault().post(message);
-            }
-        }).start();
-    }
+                json.put("newPassword", editTextNewPassword.getText().toString());
 
-    private void getVCode() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                MyHttpConnection connection = new MyHttpConnection();
-                JSONObject json = new JSONObject();
-                json.put("userId", editTextAccount.getText().toString());
-                json.put("type", 0);
-                String response = connection.doPost("http://ysdk.kystu.cn/api/sendVertifyCode/", json);
+                String response = connection.doPost("http://ysdk.kystu.cn/api/userChangePassword/", json);
                 LoginEventMessage message = JSONObject.parseObject(response, LoginEventMessage.class);
-                message.setFlag(1);
                 EventBus.getDefault().post(message);
             }
         }).start();
@@ -125,6 +90,7 @@ public class RegisterActivity extends BaseActivity {
         EventBus.getDefault().unregister(this);
     }
 
+
     private void initToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -137,8 +103,10 @@ public class RegisterActivity extends BaseActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void handleSubmit(LoginEventMessage msg) {
-        Tools.displayToast(RegisterActivity.this, msg.getInfo());
-        if (msg.getFlag() == 0) {
+        if (msg.getCode() != 0) {
+            Tools.displayToast(this, msg.getInfo());
+        } else {
+            Tools.displayToast(ChangePasswordActivity.this, msg.getInfo());
             finish();
         }
     }

@@ -1,4 +1,4 @@
-package com.lpc.smartlife.userloginabout;
+package com.lpc.smartlife.views.userloginabout;
 
 import androidx.appcompat.widget.Toolbar;
 
@@ -19,48 +19,35 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-public class ForgetActivity extends BaseActivity {
+public class RegisterActivity extends BaseActivity {
 
     EditText editTextAccount;
-    EditText editTextNewPassword;
-    EditText editTextRePassword;
+    EditText editTextPassword;
+    EditText editTextPassword2;
     EditText editTextCode;
     Button btnGetCode;
-    Button btnSubmit;
+    Button btnUserRegister;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_forget);
+        setContentView(R.layout.activity_register);
 
         setImmersiveWindows();
         initToolbar();
         initViews();
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(this);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        EventBus.getDefault().unregister(this);
-    }
-
-
-    private void initViews() {
+    public void initViews() {
         editTextAccount = findViewById(R.id.editTextAccount);
-        editTextNewPassword = findViewById(R.id.editTextPassword);
-        editTextRePassword = findViewById(R.id.editTextRePassword);
+        editTextPassword = findViewById(R.id.editTextPassword);
+        editTextPassword2 = findViewById(R.id.editTextPassword2);
         editTextCode = findViewById(R.id.editTextCode);
         btnGetCode = findViewById(R.id.btnGetCode);
-        btnSubmit = findViewById(R.id.btnUserRegister);
+        btnUserRegister = findViewById(R.id.btnUserRegister);
 
-        editTextNewPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-        editTextRePassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        editTextPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        editTextPassword2.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
 
         /**
          * 获取验证码
@@ -75,34 +62,34 @@ public class ForgetActivity extends BaseActivity {
         /**
          * 提交修改
          */
-        btnSubmit.setOnClickListener(new View.OnClickListener() {
+        btnUserRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (editTextAccount.getText().toString().trim().length() == 0) {
-                    Tools.displayToast(ForgetActivity.this, "账号不能为空");
-                } else if (editTextNewPassword.getText().toString().trim().length() == 0) {
-                    Tools.displayToast(ForgetActivity.this, "新密码不能为空");
-                } else if (!editTextNewPassword.getText().toString().trim().equals(editTextRePassword.getText().toString().trim())) {
-                    Tools.displayToast(ForgetActivity.this, "两次密码不一致");
+                    Tools.displayToast(RegisterActivity.this, "账号不能为空");
+                } else if (editTextPassword.getText().toString().trim().length() == 0) {
+                    Tools.displayToast(RegisterActivity.this, "密码不能为空");
+                } else if (!editTextPassword.getText().toString().trim().equals(editTextPassword2.getText().toString().trim())) {
+                    Tools.displayToast(RegisterActivity.this, "两次密码不一致");
                 } else if (editTextCode.getText().toString().trim().length() == 0) {
-                    Tools.displayToast(ForgetActivity.this, "验证码不能为空");
+                    Tools.displayToast(RegisterActivity.this, "验证码不能为空");
                 } else {
-                    doSubmit();
+                    doRegister();
                 }
             }
         });
     }
 
-    private void doSubmit() {
+    private void doRegister() {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 MyHttpConnection connection = new MyHttpConnection();
                 JSONObject json = new JSONObject();
                 json.put("userId", editTextAccount.getText().toString());
-                json.put("newPassword", editTextNewPassword.getText().toString());
+                json.put("password", editTextPassword.getText().toString());
                 json.put("vcode", editTextCode.getText().toString());
-                String response = connection.doPost("http://ysdk.kystu.cn/api/userForgetPassword/", json);
+                String response = connection.doPost("http://ysdk.kystu.cn/api/userRegister/", json);
                 LoginEventMessage message = JSONObject.parseObject(response, LoginEventMessage.class);
                 message.setFlag(0);
                 EventBus.getDefault().post(message);
@@ -117,13 +104,25 @@ public class ForgetActivity extends BaseActivity {
                 MyHttpConnection connection = new MyHttpConnection();
                 JSONObject json = new JSONObject();
                 json.put("userId", editTextAccount.getText().toString());
-                json.put("type", 1);
+                json.put("type", 0);
                 String response = connection.doPost("http://ysdk.kystu.cn/api/sendVertifyCode/", json);
                 LoginEventMessage message = JSONObject.parseObject(response, LoginEventMessage.class);
                 message.setFlag(1);
                 EventBus.getDefault().post(message);
             }
         }).start();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
     }
 
     private void initToolbar() {
@@ -138,18 +137,14 @@ public class ForgetActivity extends BaseActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void handleSubmit(LoginEventMessage msg) {
-        if (msg.getCode() != 0) {
-            Tools.displayToast(this, msg.getInfo());
-        } else {
-            Tools.displayToast(ForgetActivity.this, msg.getInfo());
-            if (msg.getFlag() == 0) {
-                finish();
-            }
+        Tools.displayToast(RegisterActivity.this, msg.getInfo());
+        if (msg.getFlag() == 0) {
+            finish();
         }
     }
 
     @Override
     protected int getLayoutId() {
-        return R.layout.activity_forget;
+        return R.layout.activity_change_password;
     }
 }

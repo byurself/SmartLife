@@ -1,7 +1,5 @@
 package com.lpc.smartlife;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -16,9 +14,9 @@ import android.widget.TextView;
 import com.alibaba.fastjson.JSONObject;
 import com.hxc.basemodule.BaseActivity;
 import com.lpc.smartlife.message.LoginEventMessage;
-import com.lpc.smartlife.userloginabout.ChangePasswordActivity;
-import com.lpc.smartlife.userloginabout.ForgetActivity;
-import com.lpc.smartlife.userloginabout.RegisterActivity;
+import com.lpc.smartlife.views.userloginabout.ChangePasswordActivity;
+import com.lpc.smartlife.views.userloginabout.ForgetActivity;
+import com.lpc.smartlife.views.userloginabout.RegisterActivity;
 import com.lpc.smartlife.utils.MyHttpConnection;
 import com.lpc.smartlife.utils.Tools;
 

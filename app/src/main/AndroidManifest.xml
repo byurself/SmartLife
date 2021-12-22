@@ -13,13 +13,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SmartLife">
         <activity
-            android:name=".userloginabout.ChangePasswordActivity"
+            android:name=".views.userloginabout.ChangePasswordActivity"
             android:exported="true" />
         <activity
-            android:name=".userloginabout.ForgetActivity"
+            android:name=".views.userloginabout.ForgetActivity"
             android:exported="true" />
         <activity
-            android:name=".userloginabout.RegisterActivity"
+            android:name=".views.userloginabout.RegisterActivity"
             android:exported="true" />
         <activity
             android:name=".MainActivity"
