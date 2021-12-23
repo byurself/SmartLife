@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.alibaba.fastjson.JSONObject;
 import com.hxc.basemodule.BaseActivity;
 import com.lpc.smartlife.message.LoginEventMessage;
+import com.lpc.smartlife.views.smartlife.IndexActivity;
 import com.lpc.smartlife.views.userloginabout.ChangePasswordActivity;
 import com.lpc.smartlife.views.userloginabout.ForgetActivity;
 import com.lpc.smartlife.views.userloginabout.RegisterActivity;
@@ -147,6 +148,8 @@ public class MainActivity extends BaseActivity {
                 doForget();
             }
             Tools.displayToast(MainActivity.this, msg.getInfo());
+            Intent intent = new Intent(MainActivity.this, IndexActivity.class);
+            startActivity(intent);
         } else {
             Tools.displayToast(this, msg.getInfo());
         }

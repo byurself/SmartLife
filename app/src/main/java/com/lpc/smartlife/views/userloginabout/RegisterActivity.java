@@ -145,6 +145,6 @@ public class RegisterActivity extends BaseActivity {
 
     @Override
     protected int getLayoutId() {
-        return R.layout.activity_change_password;
+        return R.layout.activity_register;
     }
 }
