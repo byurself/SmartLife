@@ -23,6 +23,7 @@ public class IndexActivity extends BaseActivity {
     RadioButton radioButtonHome;
     RadioButton radioButtonMy;
     ConstraintLayout conIndex;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,35 +44,37 @@ public class IndexActivity extends BaseActivity {
 
         fragmentManager.beginTransaction().hide(userCenterFragment).commit();
 
-        radioGroup=findViewById(R.id.indexRadioGroup);
-        radioButtonHome=findViewById(R.id.radioButtonHome);
-        radioButtonMy=findViewById(R.id.radioButtonMy);
-        conIndex=findViewById(R.id.con_index);
+        radioGroup = findViewById(R.id.indexRadioGroup);
+        radioButtonHome = findViewById(R.id.radioButtonHome);
+        radioButtonMy = findViewById(R.id.radioButtonMy);
+        conIndex = findViewById(R.id.con_index);
+
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                switch (i){
+                switch (i) {
                     case R.id.radioButtonHome:
                         conIndex.setBackground(getDrawable(R.mipmap.background));
-                        radioButtonHome.setCompoundDrawablesRelative(null, Tools.makeDrawable(R.mipmap.home_check,IndexActivity.this),null,null);
-                        radioButtonMy.setCompoundDrawablesRelative(null, Tools.makeDrawable(R.mipmap.my,IndexActivity.this),null,null);
+                        radioButtonHome.setCompoundDrawablesRelative(null, Tools.makeDrawable(R.mipmap.home_check, IndexActivity.this), null, null);
+                        radioButtonMy.setCompoundDrawablesRelative(null, Tools.makeDrawable(R.mipmap.my, IndexActivity.this), null, null);
                         radioButtonHome.setTextColor(getResources().getColor(R.color.checked));
                         radioButtonMy.setTextColor(getResources().getColor(R.color.black));
+                        showFragment(homeFragment);
                         break;
-                    case  R.id.radioButtonMy:
+                    case R.id.radioButtonMy:
                         conIndex.setBackground(getDrawable(R.drawable.background_white));
-                        radioButtonHome.setCompoundDrawablesRelative(null, Tools.makeDrawable(R.mipmap.home,IndexActivity.this),null,null);
-                        radioButtonMy.setCompoundDrawablesRelative(null, Tools.makeDrawable(R.mipmap.my_check,IndexActivity.this),null,null);
+                        radioButtonHome.setCompoundDrawablesRelative(null, Tools.makeDrawable(R.mipmap.home, IndexActivity.this), null, null);
+                        radioButtonMy.setCompoundDrawablesRelative(null, Tools.makeDrawable(R.mipmap.my_check, IndexActivity.this), null, null);
                         radioButtonHome.setTextColor(getResources().getColor(R.color.black));
                         radioButtonMy.setTextColor(getResources().getColor(R.color.checked));
+                        showFragment(userCenterFragment);
                         break;
                 }
             }
         });
     }
 
-
-    public void ShowFragment(Fragment target) {
+    public void showFragment(Fragment target) {
         for (Fragment item : fragmentManager.getFragments()) {
             fragmentManager.beginTransaction().hide(item).commit();
         }
