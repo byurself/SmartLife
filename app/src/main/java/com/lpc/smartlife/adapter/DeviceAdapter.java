@@ -14,9 +14,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.lpc.smartlife.R;
 import com.lpc.smartlife.entity.Device;
 import com.lpc.smartlife.entity.DeviceList;
+import com.lpc.smartlife.utils.MyHttpConnection;
 
 import java.util.List;
 
@@ -73,6 +77,9 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.VH> {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         mDevice.remove(mDevice.get(a));
 
+                        // 删除设备
+                        deleteDevice(mDevice.get(a).getDeviceId());
+
                         notifyDataSetChanged();
                     }
                 });
@@ -91,5 +98,17 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.VH> {
     @Override
     public int getItemCount() {
         return mDevice.size();
+    }
+
+    public void deleteDevice(Integer deviceId){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                MyHttpConnection conn = new MyHttpConnection();
+                JSONObject json = new JSONObject();
+                json.put("deviceId", deviceId);
+                String response = conn.myPost("/deleteDevice", json);
+            }
+        }).start();
     }
 }
