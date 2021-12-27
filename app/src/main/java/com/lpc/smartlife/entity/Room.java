@@ -7,10 +7,11 @@ package com.lpc.smartlife.entity;
 public class Room {
     private Integer roomId;
     private String roomName;
-    private String deviceCount;
+    private Integer deviceCount;
     private String userId;
 
-    public Room(String roomName, String deviceCount, String userId) {
+    public Room(Integer roomId, String roomName, Integer deviceCount, String userId) {
+        this.roomId = roomId;
         this.roomName = roomName;
         this.deviceCount = deviceCount;
         this.userId = userId;
@@ -40,16 +41,11 @@ public class Room {
         this.userId = userId;
     }
 
-    public String getDeviceCount() {
+    public Integer getDeviceCount() {
         return deviceCount;
     }
 
-    public void setDeviceCount(String deviceCount) {
+    public void setDeviceCount(Integer deviceCount) {
         this.deviceCount = deviceCount;
-    }
-
-    public void add(Device device){
-        DeviceList.deviceList.getDeviceList().add(device);
-        DeviceList.deviceList.httpAddDevice(device);
     }
 }

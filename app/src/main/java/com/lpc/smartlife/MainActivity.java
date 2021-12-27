@@ -149,7 +149,8 @@ public class MainActivity extends BaseActivity {
             }
             Tools.displayToast(MainActivity.this, msg.getInfo());
             Intent intent = new Intent(MainActivity.this, IndexActivity.class);
-            startActivity(intent);
+            intent.putExtra("userId", editAccount.getText().toString());
+            startActivityForResult(intent, 0);
         } else {
             Tools.displayToast(this, msg.getInfo());
         }

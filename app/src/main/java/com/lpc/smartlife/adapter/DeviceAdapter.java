@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.lpc.smartlife.R;
 import com.lpc.smartlife.entity.Device;
+import com.lpc.smartlife.entity.DeviceList;
 
 import java.util.List;
 
@@ -26,10 +27,11 @@ import java.util.List;
 public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.VH> {
     private List<Device> mDevice;
     private Context context;
-
-    public DeviceAdapter(Context context, List<Device> mDevice) {
+    private TextView textViewDeviceCount;
+    public DeviceAdapter(Context context, List<Device> mDevice, TextView textViewDeviceCount) {
         this.mDevice = mDevice;
         this.context = context;
+        this.textViewDeviceCount=textViewDeviceCount;
     }
 
     public static class VH extends RecyclerView.ViewHolder {
@@ -55,12 +57,12 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.VH> {
     @Override
     public void onBindViewHolder(@NonNull DeviceAdapter.VH holder, int position) {
         int a = position;
+        if (holder == null)
+            return;
+
         holder.tvDeviceName.setText(mDevice.get(position).getDeviceName());
         holder.ivDevice.setImageDrawable(this.context.getDrawable(mDevice.get(position).getDeviceImageId()));
-        if (a / 2 == 0)
-            holder.itemView.setRight(50);
-        else
-            holder.itemView.setLeft(50);
+        textViewDeviceCount.setText(DeviceList.deviceList.getCount() + "个设备");
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
@@ -70,6 +72,7 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.VH> {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         mDevice.remove(mDevice.get(a));
+
                         notifyDataSetChanged();
                     }
                 });

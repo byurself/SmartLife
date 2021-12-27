@@ -31,13 +31,20 @@ public class IndexActivity extends BaseActivity {
 
         setImmersiveWindows();
         init();
-
     }
 
     protected void init() {
         homeFragment = new HomeFragment();
         userCenterFragment = new UserCenterFragment();
         fragmentManager = getSupportFragmentManager();
+
+        // 获取用户id
+        String userId = getIntent().getStringExtra("userId");
+
+        // 向HomeFragment传递userId
+        Bundle bundle = new Bundle();
+        bundle.putString("userId", userId);
+        homeFragment.setArguments(bundle);
 
         fragmentManager.beginTransaction().add(R.id.indexFrameLayout, homeFragment, "home").commit();
         fragmentManager.beginTransaction().add(R.id.indexFrameLayout, userCenterFragment, "userCenter").commit();

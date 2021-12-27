@@ -19,10 +19,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.lpc.smartlife.R;
 import com.lpc.smartlife.adapter.DeviceAdapter;
 import com.lpc.smartlife.entity.Device;
 import com.lpc.smartlife.entity.DeviceList;
+import com.lpc.smartlife.entity.User;
+import com.lpc.smartlife.utils.MyHttpConnection;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +48,6 @@ public class HomeFragment extends Fragment {
 
     RecyclerView recyclerView;
     DeviceAdapter deviceAdapter;
-    List<Device> myDeviceList;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -53,11 +58,18 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.home_layout, container, false);
-        init(v);
+
+        // 获取传递过来的userId
+        Bundle bundle = this.getArguments();
+        String userId = null;
+        if (bundle != null) {
+            userId = bundle.getString("userId");
+        }
+        init(v, userId);
         return v;
     }
 
-    public void init(View v) {
+    public void init(View v, String userId) {
         indexRadioGroup = v.findViewById(R.id.indexRadioGroup);
         radioButtonDevices = v.findViewById(R.id.radioButtonDevices);
         radioButtonType = v.findViewById(R.id.radioButtonType);
@@ -115,7 +127,7 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        initRecyclerView(devices);
+        initRecyclerView(devices, userId);
 
         indexRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -123,34 +135,57 @@ public class HomeFragment extends Fragment {
                 switch (i) {
                     case R.id.radioButtonDevices:
                         viewPager.setCurrentItem(0);
-                        radioButtonDevices.setTextSize(TypedValue.COMPLEX_UNIT_SP,24);
-                        radioButtonType.setTextSize(TypedValue.COMPLEX_UNIT_SP,20);
+                        radioButtonDevices.setTextSize(TypedValue.COMPLEX_UNIT_SP, 24);
+                        radioButtonType.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
                         break;
                     case R.id.radioButtonType:
                         viewPager.setCurrentItem(1);
-                        radioButtonDevices.setTextSize(TypedValue.COMPLEX_UNIT_SP,20);
-                        radioButtonType.setTextSize(TypedValue.COMPLEX_UNIT_SP,24);
+                        radioButtonDevices.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+                        radioButtonType.setTextSize(TypedValue.COMPLEX_UNIT_SP, 24);
                         break;
                 }
             }
         });
     }
 
-    public void initRecyclerView(View root) {
+    public void initRecyclerView(View root, String userId) {
         recyclerView = root.findViewById(R.id.recyclerView);
 
-        myDeviceList = new ArrayList<Device>();
-        deviceAdapter = new DeviceAdapter(root.getContext(), DeviceList.deviceList.getDeviceList());
-        DeviceList.deviceList.getDeviceList().add(new Device("FreeBuds3",R.mipmap.freebuds3,1,"123456"));
-        DeviceList.deviceList.getDeviceList().add(new Device("FreeBuds3",R.mipmap.huaweifreebuds4,1,"123456"));
-        DeviceList.deviceList.getDeviceList().add(new Device("FreeBuds3",R.mipmap.huaweifreebuds4,1,"123456"));
+        getDeviceList(userId);
+        deviceAdapter = new DeviceAdapter(root.getContext(), DeviceList.deviceList.getDeviceList(),textViewDeviceCount);
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(root.getContext(), 2, GridLayoutManager.VERTICAL, false);
 
         recyclerView.setLayoutManager(gridLayoutManager);
         recyclerView.setAdapter(deviceAdapter);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        textViewDeviceCount.setText(DeviceList.deviceList.getCount() + "个设备");
+    }
+
+    public void getDeviceList(String userId) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                MyHttpConnection conn = new MyHttpConnection();
+                JSONObject json = new JSONObject();
+                json.put("userId", userId);
+                String response = conn.myPost("/getDeviceList", json);
+                JSONObject jsonObject = JSONObject.parseObject(response);
+                JSONArray arrays = jsonObject.getJSONArray("data");
+                for (int i = 0; i < arrays.size(); i++) {
+                    String s = arrays.get(i) + "";
+                    JSONObject object = JSON.parseObject(s);
+                    Device device = new Device(
+                            object.getInteger("deviceId"),
+                            object.getString("deviceName"),
+                            object.getInteger("deviceImageId"),
+                            object.getInteger("roomId"),
+                            object.getString("userId"),
+                            object.getInteger("isConnected"));
+
+                    DeviceList.deviceList.addDevice(device);
+                }
+            }
+        }).start();
     }
 
 }

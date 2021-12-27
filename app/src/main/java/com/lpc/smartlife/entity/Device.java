@@ -10,12 +10,18 @@ public class Device {
     private Integer deviceImageId;
     private Integer roomId;
     private String userId;
+    private Integer isConnected;
 
-    public Device(String deviceName, Integer deviceImageId, Integer roomId, String userId) {
+    public Device() {
+    }
+
+    public Device(Integer deviceId, String deviceName, Integer deviceImageId, Integer roomId, String userId, Integer isConnected) {
+        this.deviceId = deviceId;
         this.deviceName = deviceName;
         this.deviceImageId = deviceImageId;
         this.roomId = roomId;
         this.userId = userId;
+        this.isConnected = isConnected;
     }
 
     public Integer getDeviceId() {
@@ -56,5 +62,25 @@ public class Device {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public Integer getIsConnected() {
+        return isConnected;
+    }
+
+    public void setIsConnected(Integer isConnected) {
+        this.isConnected = isConnected;
+    }
+
+    @Override
+    public String toString() {
+        return "Device{" +
+                "deviceId=" + deviceId +
+                ", deviceName='" + deviceName + '\'' +
+                ", deviceImageId=" + deviceImageId +
+                ", roomId=" + roomId +
+                ", userId='" + userId + '\'' +
+                ", isConnected=" + isConnected +
+                '}';
     }
 }
