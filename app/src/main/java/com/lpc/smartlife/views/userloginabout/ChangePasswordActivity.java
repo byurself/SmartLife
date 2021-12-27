@@ -71,7 +71,7 @@ public class ChangePasswordActivity extends BaseActivity {
                 json.put("password", editTextPassword.getText().toString());
                 json.put("newPassword", editTextNewPassword.getText().toString());
 
-                String response = connection.doPost("http://ysdk.kystu.cn/api/userChangePassword/", json);
+                String response = connection.myPost("/userChangePassword", json);
                 LoginEventMessage message = JSONObject.parseObject(response, LoginEventMessage.class);
                 EventBus.getDefault().post(message);
             }

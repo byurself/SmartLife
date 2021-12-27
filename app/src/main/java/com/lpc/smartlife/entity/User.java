@@ -1,7 +1,11 @@
 package com.lpc.smartlife.entity;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.lpc.smartlife.utils.MyHttpConnection;
+
+import java.lang.reflect.Field;
 
 /**
  * @author byu_rself
@@ -26,12 +30,12 @@ public class User {
     }
 
     public String getUserName() {
+        getUserInfo(userId);
         return userName;
     }
 
     public void setUserName(String userName) {
         this.userName = userName;
-        changeUserMessage();
     }
 
     public String getPassword() {
@@ -40,19 +44,19 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
-        changeUserMessage();
     }
 
-    private void changeUserMessage() {
+    public void getUserInfo(String userId) {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 MyHttpConnection coon = new MyHttpConnection();
                 JSONObject json = new JSONObject();
                 json.put("userId", userId);
-                json.put("userName", userName);
-                json.put("password", password);
-                String response = coon.doPost("/userChange/", json);
+                String response = coon.myPost("/getUserNickName", json);
+                JSONObject jsonObject = JSON.parseObject(response);
+                String nickName = jsonObject.getString("nickName");
+                user.setUserName(nickName);
             }
         }).start();
     }

@@ -32,6 +32,7 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.VH> {
     private List<Device> mDevice;
     private Context context;
     private TextView textViewDeviceCount;
+
     public DeviceAdapter(Context context, List<Device> mDevice, TextView textViewDeviceCount) {
         this.mDevice = mDevice;
         this.context = context;
@@ -61,6 +62,7 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.VH> {
     @Override
     public void onBindViewHolder(@NonNull DeviceAdapter.VH holder, int position) {
         int a = position;
+
         if (holder == null)
             return;
 

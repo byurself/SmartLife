@@ -132,7 +132,7 @@ public class MainActivity extends BaseActivity {
                 JSONObject json = new JSONObject();
                 json.put("userId", editAccount.getText().toString());
                 json.put("password", editPassword.getText().toString());
-                String response = connection.doPost("http://ysdk.kystu.cn/api/userLogin/", json);
+                String response = connection.myPost("/userLogin", json);
                 LoginEventMessage message = JSONObject.parseObject(response, LoginEventMessage.class);
                 EventBus.getDefault().post(message);
             }

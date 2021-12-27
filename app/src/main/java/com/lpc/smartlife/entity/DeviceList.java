@@ -19,8 +19,8 @@ public class DeviceList {
         devices = new ArrayList<>();
     }
 
-    public void addDevice(Device device){
-        if (device==null){
+    public void addDevice(Device device) {
+        if (device == null) {
             return;
         }
         devices.add(device);

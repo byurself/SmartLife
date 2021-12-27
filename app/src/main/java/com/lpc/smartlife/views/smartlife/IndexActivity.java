@@ -10,6 +10,7 @@ import androidx.fragment.app.FragmentManager;
 
 import com.hxc.basemodule.BaseActivity;
 import com.lpc.smartlife.R;
+import com.lpc.smartlife.entity.User;
 import com.lpc.smartlife.utils.Tools;
 import com.lpc.smartlife.views.fragment.HomeFragment;
 import com.lpc.smartlife.views.fragment.UserCenterFragment;
@@ -40,6 +41,8 @@ public class IndexActivity extends BaseActivity {
 
         // 获取用户id
         String userId = getIntent().getStringExtra("userId");
+        User.user.setUserId(userId);
+        User.user.getUserInfo(userId);
 
         // 向HomeFragment传递userId
         Bundle bundle = new Bundle();

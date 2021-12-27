@@ -10,6 +10,9 @@ public class Room {
     private Integer deviceCount;
     private String userId;
 
+    public Room() {
+    }
+
     public Room(Integer roomId, String roomName, Integer deviceCount, String userId) {
         this.roomId = roomId;
         this.roomName = roomName;
@@ -47,5 +50,15 @@ public class Room {
 
     public void setDeviceCount(Integer deviceCount) {
         this.deviceCount = deviceCount;
+    }
+
+    @Override
+    public String toString() {
+        return "Room{" +
+                "roomId=" + roomId +
+                ", roomName='" + roomName + '\'' +
+                ", deviceCount=" + deviceCount +
+                ", userId='" + userId + '\'' +
+                '}';
     }
 }

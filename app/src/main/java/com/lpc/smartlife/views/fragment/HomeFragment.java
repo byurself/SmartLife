@@ -14,7 +14,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
@@ -22,11 +24,12 @@ import androidx.viewpager.widget.ViewPager;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.lpc.smartlife.R;
 import com.lpc.smartlife.adapter.DeviceAdapter;
+import com.lpc.smartlife.adapter.RoomAdapter;
 import com.lpc.smartlife.entity.Device;
 import com.lpc.smartlife.entity.DeviceList;
+import com.lpc.smartlife.entity.Room;
 import com.lpc.smartlife.entity.User;
 import com.lpc.smartlife.utils.MyHttpConnection;
 
@@ -41,13 +44,16 @@ public class HomeFragment extends Fragment {
 
     RadioGroup indexRadioGroup;
     RadioButton radioButtonDevices;
-    RadioButton radioButtonType;
+    RadioButton radioButtonRoom;
     ViewPager viewPager;
     ArrayList<View> viewList;
     TextView textViewDeviceCount;
+    TextView textViewUserHome;
 
-    RecyclerView recyclerView;
+    RecyclerView rvDevice;
+    RecyclerView rvRoom;
     DeviceAdapter deviceAdapter;
+    RoomAdapter roomAdapter;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -72,17 +78,20 @@ public class HomeFragment extends Fragment {
     public void init(View v, String userId) {
         indexRadioGroup = v.findViewById(R.id.indexRadioGroup);
         radioButtonDevices = v.findViewById(R.id.radioButtonDevices);
-        radioButtonType = v.findViewById(R.id.radioButtonType);
+        radioButtonRoom = v.findViewById(R.id.radioButtonRoom);
         viewPager = v.findViewById(R.id.viewPager);
         textViewDeviceCount = v.findViewById(R.id.textViewDeviceCount);
+        textViewUserHome = v.findViewById(R.id.textViewUserHome);
+
+        textViewUserHome.setText(User.user.getUserName());
 
         LayoutInflater inflater = getLayoutInflater().from(this.getContext());
         View devices = inflater.inflate(R.layout.devices_layout, null);
-        View type = inflater.inflate(R.layout.type_layout, null);
+        View room = inflater.inflate(R.layout.room_layout, null);
 
         viewList = new ArrayList<>();
         viewList.add(devices);
-        viewList.add(type);
+        viewList.add(room);
 
         PagerAdapter pagerAdapter = new PagerAdapter() {
             @Override
@@ -127,7 +136,8 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        initRecyclerView(devices, userId);
+        initDeviceRecyclerView(devices, userId);
+        initRoomRecyclerView(room, userId);
 
         indexRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -136,29 +146,53 @@ public class HomeFragment extends Fragment {
                     case R.id.radioButtonDevices:
                         viewPager.setCurrentItem(0);
                         radioButtonDevices.setTextSize(TypedValue.COMPLEX_UNIT_SP, 24);
-                        radioButtonType.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+                        radioButtonRoom.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
                         break;
-                    case R.id.radioButtonType:
+                    case R.id.radioButtonRoom:
                         viewPager.setCurrentItem(1);
                         radioButtonDevices.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
-                        radioButtonType.setTextSize(TypedValue.COMPLEX_UNIT_SP, 24);
+                        radioButtonRoom.setTextSize(TypedValue.COMPLEX_UNIT_SP, 24);
                         break;
                 }
             }
         });
     }
 
-    public void initRecyclerView(View root, String userId) {
-        recyclerView = root.findViewById(R.id.recyclerView);
+    public void initDeviceRecyclerView(View root, String userId) {
+        rvDevice = root.findViewById(R.id.rvDevice);
 
         getDeviceList(userId);
-        deviceAdapter = new DeviceAdapter(root.getContext(), DeviceList.deviceList.getDeviceList(),textViewDeviceCount);
+        deviceAdapter = new DeviceAdapter(root.getContext(), DeviceList.deviceList.getDeviceList(), textViewDeviceCount);
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(root.getContext(), 2, GridLayoutManager.VERTICAL, false);
 
-        recyclerView.setLayoutManager(gridLayoutManager);
-        recyclerView.setAdapter(deviceAdapter);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        rvDevice.setLayoutManager(gridLayoutManager);
+        rvDevice.setAdapter(deviceAdapter);
+        rvDevice.setItemAnimator(new DefaultItemAnimator());
+    }
+
+    private List<Room> myList;
+
+    public void initRoomRecyclerView(View root, String userId) {
+        rvRoom = root.findViewById(R.id.rvRoom);
+        // 布局设置
+        LinearLayoutManager manager = new LinearLayoutManager(root.getContext());
+        rvRoom.setLayoutManager(manager);
+        // 设置适配器
+        initAdapter(root);
+        rvRoom.setAdapter(roomAdapter);
+        // 设置分割线
+        rvRoom.addItemDecoration(new DividerItemDecoration(root.getContext(), DividerItemDecoration.VERTICAL));
+        // 设置增加或删除条目的动画
+        rvRoom.setItemAnimator(new DefaultItemAnimator());
+    }
+
+    private void initAdapter(View root) {
+        myList = new ArrayList<>();
+        myList.add(new Room(1, "卧室", 1, "13967821960"));
+        myList.add(new Room(2, "厨房", 1, "13967821960"));
+
+        roomAdapter = new RoomAdapter(root.getContext(), myList);
     }
 
     public void getDeviceList(String userId) {
