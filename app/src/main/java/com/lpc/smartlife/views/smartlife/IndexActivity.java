@@ -31,6 +31,16 @@ public class IndexActivity extends BaseActivity {
         setContentView(R.layout.activity_index);
 
         setImmersiveWindows();
+
+        int id = getIntent().getIntExtra("id", 0);
+        if (id == 1){
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.indexFrameLayout,new HomeFragment())
+                    .addToBackStack(null)
+                    .commit();
+        }
+
         init();
     }
 
@@ -38,16 +48,6 @@ public class IndexActivity extends BaseActivity {
         homeFragment = new HomeFragment();
         userCenterFragment = new UserCenterFragment();
         fragmentManager = getSupportFragmentManager();
-
-        // 获取用户id
-        String userId = getIntent().getStringExtra("userId");
-        User.user.setUserId(userId);
-        User.user.getUserInfo(userId);
-
-        // 向HomeFragment传递userId
-        Bundle bundle = new Bundle();
-        bundle.putString("userId", userId);
-        homeFragment.setArguments(bundle);
 
         fragmentManager.beginTransaction().add(R.id.indexFrameLayout, homeFragment, "home").commit();
         fragmentManager.beginTransaction().add(R.id.indexFrameLayout, userCenterFragment, "userCenter").commit();

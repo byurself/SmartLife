@@ -1,11 +1,13 @@
 package com.lpc.smartlife.views.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -32,6 +34,7 @@ import com.lpc.smartlife.entity.DeviceList;
 import com.lpc.smartlife.entity.Room;
 import com.lpc.smartlife.entity.User;
 import com.lpc.smartlife.utils.MyHttpConnection;
+import com.lpc.smartlife.views.smartlife.RoomInfoActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +52,7 @@ public class HomeFragment extends Fragment {
     ArrayList<View> viewList;
     TextView textViewDeviceCount;
     TextView textViewUserHome;
+    ImageView imageView;
 
     RecyclerView rvDevice;
     RecyclerView rvRoom;
@@ -64,24 +68,34 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.home_layout, container, false);
-
-        // 获取传递过来的userId
-        Bundle bundle = this.getArguments();
-        String userId = null;
-        if (bundle != null) {
-            userId = bundle.getString("userId");
-        }
-        init(v, userId);
+        init(v);
         return v;
     }
 
-    public void init(View v, String userId) {
+    public void init(View v) {
         indexRadioGroup = v.findViewById(R.id.indexRadioGroup);
         radioButtonDevices = v.findViewById(R.id.radioButtonDevices);
         radioButtonRoom = v.findViewById(R.id.radioButtonRoom);
         viewPager = v.findViewById(R.id.viewPager);
         textViewDeviceCount = v.findViewById(R.id.textViewDeviceCount);
         textViewUserHome = v.findViewById(R.id.textViewUserHome);
+        imageView = v.findViewById(R.id.imageView8);
+
+        textViewUserHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), RoomInfoActivity.class);
+                startActivityForResult(intent, 0);
+            }
+        });
+
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), RoomInfoActivity.class);
+                startActivityForResult(intent, 0);
+            }
+        });
 
         textViewUserHome.setText(User.user.getUserName());
 
@@ -136,8 +150,8 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        initDeviceRecyclerView(devices, userId);
-        initRoomRecyclerView(room, userId);
+        initDeviceRecyclerView(devices);
+        initRoomRecyclerView(room);
 
         indexRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -158,10 +172,10 @@ public class HomeFragment extends Fragment {
         });
     }
 
-    public void initDeviceRecyclerView(View root, String userId) {
+    public void initDeviceRecyclerView(View root) {
         rvDevice = root.findViewById(R.id.rvDevice);
 
-        getDeviceList(userId);
+        getDeviceList();
         deviceAdapter = new DeviceAdapter(root.getContext(), DeviceList.deviceList.getDeviceList(), textViewDeviceCount);
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(root.getContext(), 2, GridLayoutManager.VERTICAL, false);
@@ -173,7 +187,7 @@ public class HomeFragment extends Fragment {
 
     private List<Room> myList;
 
-    public void initRoomRecyclerView(View root, String userId) {
+    public void initRoomRecyclerView(View root) {
         rvRoom = root.findViewById(R.id.rvRoom);
         // 布局设置
         LinearLayoutManager manager = new LinearLayoutManager(root.getContext());
@@ -195,16 +209,17 @@ public class HomeFragment extends Fragment {
         roomAdapter = new RoomAdapter(root.getContext(), myList);
     }
 
-    public void getDeviceList(String userId) {
+    public void getDeviceList() {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 MyHttpConnection conn = new MyHttpConnection();
                 JSONObject json = new JSONObject();
-                json.put("userId", userId);
+                json.put("userId", User.user.getUserId());
                 String response = conn.myPost("/getDeviceList", json);
                 JSONObject jsonObject = JSONObject.parseObject(response);
                 JSONArray arrays = jsonObject.getJSONArray("data");
+
                 for (int i = 0; i < arrays.size(); i++) {
                     String s = arrays.get(i) + "";
                     JSONObject object = JSON.parseObject(s);

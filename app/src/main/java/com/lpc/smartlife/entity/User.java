@@ -30,7 +30,6 @@ public class User {
     }
 
     public String getUserName() {
-        getUserInfo(userId);
         return userName;
     }
 

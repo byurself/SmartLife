@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.hxc.basemodule.BaseActivity;
+import com.lpc.smartlife.entity.User;
 import com.lpc.smartlife.message.LoginEventMessage;
 import com.lpc.smartlife.views.smartlife.IndexActivity;
 import com.lpc.smartlife.views.userloginabout.ChangePasswordActivity;
@@ -148,9 +149,11 @@ public class MainActivity extends BaseActivity {
                 doForget();
             }
             Tools.displayToast(MainActivity.this, msg.getInfo());
+            User.user.setUserId(editAccount.getText().toString());
+            User.user.getUserInfo(editAccount.getText().toString());
+            User.user.setPassword(editPassword.getText().toString());
             Intent intent = new Intent(MainActivity.this, IndexActivity.class);
-            intent.putExtra("userId", editAccount.getText().toString());
-            startActivityForResult(intent, 0);
+            startActivity(intent);
         } else {
             Tools.displayToast(this, msg.getInfo());
         }

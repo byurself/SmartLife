@@ -36,7 +36,7 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.VH> {
     public DeviceAdapter(Context context, List<Device> mDevice, TextView textViewDeviceCount) {
         this.mDevice = mDevice;
         this.context = context;
-        this.textViewDeviceCount=textViewDeviceCount;
+        this.textViewDeviceCount = textViewDeviceCount;
     }
 
     public static class VH extends RecyclerView.ViewHolder {
@@ -102,7 +102,7 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.VH> {
         return mDevice.size();
     }
 
-    public void deleteDevice(Integer deviceId){
+    public void deleteDevice(Integer deviceId) {
         new Thread(new Runnable() {
             @Override
             public void run() {

@@ -26,23 +26,6 @@ public class DeviceList {
         devices.add(device);
     }
 
-    public void httpAddDevice(Device device) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                MyHttpConnection coon = new MyHttpConnection();
-                JSONObject json = new JSONObject();
-                json.put("roomId", device.getRoomId());
-                json.put("userId", device.getUserId());
-                json.put("deviceImageId", device.getDeviceImageId());
-                json.put("deviceName", device.getDeviceName());
-                String response = coon.myPost("/addDeviceList", json);
-                JSONObject msg = JSONObject.parseObject(response);
-                devices.get(devices.size() - 1).setDeviceId(msg.getInteger("deviceId"));
-            }
-        }).start();
-    }
-
     public List<Device> getDeviceList() {
         return devices;
     }
