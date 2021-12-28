@@ -12,4 +12,5 @@
     <color name="checked">#1296db</color>
     <color name="toolbar_bkcolor">#27c6db</color>
     <color name="title_color">#ffffffff</color>
+    <color name="blue">#FF0050FF</color>
 </resources>
