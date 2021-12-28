@@ -1,5 +1,6 @@
 package com.lpc.smartlife.views.smartlife;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
@@ -7,12 +8,19 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.hxc.basemodule.BaseActivity;
 import com.lpc.smartlife.R;
+import com.lpc.smartlife.entity.Device;
 import com.lpc.smartlife.entity.DeviceList;
 import com.lpc.smartlife.entity.User;
 import com.lpc.smartlife.utils.CreateDialog;
+import com.lpc.smartlife.utils.MyHttpConnection;
 import com.lpc.smartlife.utils.Tools;
+
+import java.util.List;
 
 public class RoomInfoActivity extends BaseActivity {
 
@@ -40,7 +48,7 @@ public class RoomInfoActivity extends BaseActivity {
         super.onStart();
         tvUsersHome.setText(User.user.getUserName());
         tvEditUser.setText(User.user.getUserName());
-        tvEditDeviceCount.setText(DeviceList.deviceList.getCount() + "个设备");
+        tvEditDeviceCount.setText(DeviceList.deviceList.getDeviceList().size() + "个设备");
     }
 
     public void init() {
@@ -67,6 +75,14 @@ public class RoomInfoActivity extends BaseActivity {
             }
         });
 
+        deviceManager.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(), DeviceManagerActivity.class);
+                startActivityForResult(intent, 1);
+            }
+        });
+
     }
 
     public void showDialog(View view) {
@@ -90,10 +106,24 @@ public class RoomInfoActivity extends BaseActivity {
                 User.user.setUserName(createDialog.et_home_name.getText().toString().trim());
                 tvUsersHome.setText(User.user.getUserName());
                 tvEditUser.setText(User.user.getUserName());
+                updateUserInfo();
                 createDialog.cancel();
             }
         }
     };
+
+    public void updateUserInfo() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                MyHttpConnection conn = new MyHttpConnection();
+                JSONObject json = new JSONObject();
+                json.put("userId", User.user.getUserId());
+                json.put("nickName", User.user.getUserName());
+                String response = conn.myPost("/updateUserInfo", json);
+            }
+        }).start();
+    }
 
     @Override
     protected int getLayoutId() {

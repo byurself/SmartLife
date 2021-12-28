@@ -59,6 +59,9 @@ public class HomeFragment extends Fragment {
     DeviceAdapter deviceAdapter;
     RoomAdapter roomAdapter;
 
+    View devices;
+    View room;
+
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -70,6 +73,14 @@ public class HomeFragment extends Fragment {
         View v = inflater.inflate(R.layout.home_layout, container, false);
         init(v);
         return v;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        textViewUserHome.setText(User.user.getUserName());
+        initDeviceRecyclerView(devices);
+        initRoomRecyclerView(room);
     }
 
     public void init(View v) {
@@ -97,11 +108,9 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        textViewUserHome.setText(User.user.getUserName());
-
         LayoutInflater inflater = getLayoutInflater().from(this.getContext());
-        View devices = inflater.inflate(R.layout.devices_layout, null);
-        View room = inflater.inflate(R.layout.room_layout, null);
+        devices = inflater.inflate(R.layout.devices_layout, null);
+        room = inflater.inflate(R.layout.room_layout, null);
 
         viewList = new ArrayList<>();
         viewList.add(devices);
@@ -150,8 +159,8 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        initDeviceRecyclerView(devices);
-        initRoomRecyclerView(room);
+//        initDeviceRecyclerView(devices);
+//        initRoomRecyclerView(room);
 
         indexRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -175,7 +184,6 @@ public class HomeFragment extends Fragment {
     public void initDeviceRecyclerView(View root) {
         rvDevice = root.findViewById(R.id.rvDevice);
 
-        getDeviceList();
         deviceAdapter = new DeviceAdapter(root.getContext(), DeviceList.deviceList.getDeviceList(), textViewDeviceCount);
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(root.getContext(), 2, GridLayoutManager.VERTICAL, false);
@@ -207,34 +215,6 @@ public class HomeFragment extends Fragment {
         myList.add(new Room(2, "厨房", 1, "13967821960"));
 
         roomAdapter = new RoomAdapter(root.getContext(), myList);
-    }
-
-    public void getDeviceList() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                MyHttpConnection conn = new MyHttpConnection();
-                JSONObject json = new JSONObject();
-                json.put("userId", User.user.getUserId());
-                String response = conn.myPost("/getDeviceList", json);
-                JSONObject jsonObject = JSONObject.parseObject(response);
-                JSONArray arrays = jsonObject.getJSONArray("data");
-
-                for (int i = 0; i < arrays.size(); i++) {
-                    String s = arrays.get(i) + "";
-                    JSONObject object = JSON.parseObject(s);
-                    Device device = new Device(
-                            object.getInteger("deviceId"),
-                            object.getString("deviceName"),
-                            object.getInteger("deviceImageId"),
-                            object.getInteger("roomId"),
-                            object.getString("userId"),
-                            object.getInteger("isConnected"));
-
-                    DeviceList.deviceList.addDevice(device);
-                }
-            }
-        }).start();
     }
 
 }

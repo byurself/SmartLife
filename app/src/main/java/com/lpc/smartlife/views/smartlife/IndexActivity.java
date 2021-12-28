@@ -32,16 +32,13 @@ public class IndexActivity extends BaseActivity {
 
         setImmersiveWindows();
 
-        int id = getIntent().getIntExtra("id", 0);
-        if (id == 1){
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.indexFrameLayout,new HomeFragment())
-                    .addToBackStack(null)
-                    .commit();
-        }
-
         init();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
     }
 
     protected void init() {
