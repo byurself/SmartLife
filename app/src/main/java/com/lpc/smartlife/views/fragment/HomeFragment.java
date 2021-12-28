@@ -32,6 +32,7 @@ import com.lpc.smartlife.adapter.RoomAdapter;
 import com.lpc.smartlife.entity.Device;
 import com.lpc.smartlife.entity.DeviceList;
 import com.lpc.smartlife.entity.Room;
+import com.lpc.smartlife.entity.RoomList;
 import com.lpc.smartlife.entity.User;
 import com.lpc.smartlife.utils.MyHttpConnection;
 import com.lpc.smartlife.views.smartlife.RoomInfoActivity;
@@ -159,9 +160,6 @@ public class HomeFragment extends Fragment {
             }
         });
 
-//        initDeviceRecyclerView(devices);
-//        initRoomRecyclerView(room);
-
         indexRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
@@ -193,28 +191,19 @@ public class HomeFragment extends Fragment {
         rvDevice.setItemAnimator(new DefaultItemAnimator());
     }
 
-    private List<Room> myList;
-
     public void initRoomRecyclerView(View root) {
         rvRoom = root.findViewById(R.id.rvRoom);
         // 布局设置
         LinearLayoutManager manager = new LinearLayoutManager(root.getContext());
         rvRoom.setLayoutManager(manager);
         // 设置适配器
-        initAdapter(root);
+        RoomList.roomList.getRoomList();
+        roomAdapter = new RoomAdapter(root.getContext(), RoomList.roomList.getRooms());
         rvRoom.setAdapter(roomAdapter);
         // 设置分割线
         rvRoom.addItemDecoration(new DividerItemDecoration(root.getContext(), DividerItemDecoration.VERTICAL));
         // 设置增加或删除条目的动画
         rvRoom.setItemAnimator(new DefaultItemAnimator());
-    }
-
-    private void initAdapter(View root) {
-        myList = new ArrayList<>();
-        myList.add(new Room(1, "卧室", 1, "13967821960"));
-        myList.add(new Room(2, "厨房", 1, "13967821960"));
-
-        roomAdapter = new RoomAdapter(root.getContext(), myList);
     }
 
 }

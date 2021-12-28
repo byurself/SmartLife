@@ -6,6 +6,18 @@
     android:layout_height="match_parent"
     tools:context=".views.smartlife.DeviceManagerActivity">
 
+    <TextView
+        android:id="@+id/textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="设备管理"
+        android:textColor="@color/black"
+        android:textSize="34sp"
+        app:layout_constraintBottom_toBottomOf="@+id/ibBackToRoomInfo"
+        app:layout_constraintStart_toEndOf="@+id/ibBackToRoomInfo"
+        app:layout_constraintTop_toTopOf="@+id/ibBackToRoomInfo" />
+
     <ImageButton
         android:id="@+id/ibBackToRoomInfo"
         android:layout_width="48dp"
@@ -20,13 +32,27 @@
         app:srcCompat="@mipmap/left"
         tools:ignore="SpeakableTextPresentCheck" />
 
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="341dp"
-        android:layout_marginEnd="148dp"
-        android:text="设备管理"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvDeviceManager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textview" />
+
+    <ImageView
+        android:id="@+id/ivAddRoom"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="24dp"
+        app:layout_constraintBottom_toBottomOf="@+id/textview"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textview"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@mipmap/add_black" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
