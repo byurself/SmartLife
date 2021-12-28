@@ -8,19 +8,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.hxc.basemodule.BaseActivity;
 import com.lpc.smartlife.R;
-import com.lpc.smartlife.entity.Device;
 import com.lpc.smartlife.entity.DeviceList;
 import com.lpc.smartlife.entity.User;
 import com.lpc.smartlife.utils.CreateDialog;
 import com.lpc.smartlife.utils.MyHttpConnection;
 import com.lpc.smartlife.utils.Tools;
-
-import java.util.List;
 
 public class RoomInfoActivity extends BaseActivity {
 

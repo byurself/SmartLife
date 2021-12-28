@@ -26,8 +26,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:text="IF、的家"
-        android:textSize="34sp"
         android:textColor="@color/black"
+        android:textSize="34sp"
         app:layout_constraintBottom_toBottomOf="@+id/imageButtonBack"
         app:layout_constraintStart_toEndOf="@+id/imageButtonBack"
         app:layout_constraintTop_toTopOf="@+id/imageButtonBack" />
@@ -38,8 +38,8 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
-        android:orientation="vertical"
         android:background="@drawable/room_background"
+        android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvUsersHome">
@@ -57,18 +57,18 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="10dp"
                 android:gravity="center"
-                android:textSize="20sp"
+                android:text="家庭名称"
                 android:textColor="@color/black"
-                android:text="家庭名称" />
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/tvEditUser"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="IF、的家"
-                android:gravity="center"
                 android:layout_marginLeft="200dp"
                 android:layout_marginRight="10dp"
+                android:gravity="center"
+                android:text="IF、的家"
                 android:textSize="16sp" />
 
             <ImageView
@@ -78,13 +78,12 @@
                 android:layout_gravity="center"
                 app:srcCompat="@mipmap/grey_right" />
         </LinearLayout>
-        
+
         <View
             android:layout_width="380dp"
             android:layout_height="1dp"
-            android:background="#80AFB1B3"
-            android:layout_gravity="center_horizontal">
-        </View>
+            android:layout_gravity="center_horizontal"
+            android:background="#80AFB1B3"></View>
 
         <LinearLayout
             android:id="@+id/deviceManager"
@@ -99,18 +98,18 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="10dp"
                 android:gravity="center"
-                android:textSize="20sp"
+                android:text="设备管理"
                 android:textColor="@color/black"
-                android:text="设备管理" />
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/tvEditDeviceCount"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="1个设备"
-                android:gravity="center"
                 android:layout_marginLeft="200dp"
                 android:layout_marginRight="10dp"
+                android:gravity="center"
+                android:text="1个设备"
                 android:textSize="16sp" />
 
             <ImageView
@@ -120,5 +119,11 @@
                 android:layout_gravity="center"
                 app:srcCompat="@mipmap/grey_right" />
         </LinearLayout>
+
+        <View
+            android:layout_width="380dp"
+            android:layout_height="1dp"
+            android:layout_gravity="center_horizontal"
+            android:background="#80AFB1B3"></View>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -38,7 +38,6 @@ public class IndexActivity extends BaseActivity {
     @Override
     protected void onStart() {
         super.onStart();
-
     }
 
     protected void init() {

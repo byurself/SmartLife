@@ -80,8 +80,8 @@ public class HomeFragment extends Fragment {
     public void onStart() {
         super.onStart();
         textViewUserHome.setText(User.user.getUserName());
-        initDeviceRecyclerView(devices);
-        initRoomRecyclerView(room);
+        deviceAdapter.notifyDataSetChanged();
+        roomAdapter.notifyDataSetChanged();
     }
 
     public void init(View v) {
@@ -140,6 +140,9 @@ public class HomeFragment extends Fragment {
                 return viewList.get(position);
             }
         };
+
+        initDeviceRecyclerView(devices);
+        initRoomRecyclerView(room);
 
         viewPager.setAdapter(pagerAdapter);
 
