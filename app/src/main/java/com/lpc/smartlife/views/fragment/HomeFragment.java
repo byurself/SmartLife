@@ -1,6 +1,7 @@
 package com.lpc.smartlife.views.fragment;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.TypedValue;
@@ -23,22 +24,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.lpc.smartlife.R;
 import com.lpc.smartlife.adapter.DeviceAdapter;
 import com.lpc.smartlife.adapter.RoomAdapter;
-import com.lpc.smartlife.entity.Device;
 import com.lpc.smartlife.entity.DeviceList;
-import com.lpc.smartlife.entity.Room;
 import com.lpc.smartlife.entity.RoomList;
 import com.lpc.smartlife.entity.User;
-import com.lpc.smartlife.utils.MyHttpConnection;
 import com.lpc.smartlife.views.smartlife.RoomInfoActivity;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author byu_rself
@@ -155,6 +149,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onPageSelected(int position) {
                 indexRadioGroup.check(indexRadioGroup.getChildAt(position).getId());
+                deviceAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -171,11 +166,13 @@ public class HomeFragment extends Fragment {
                         viewPager.setCurrentItem(0);
                         radioButtonDevices.setTextSize(TypedValue.COMPLEX_UNIT_SP, 24);
                         radioButtonRoom.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+                        deviceAdapter.notifyDataSetChanged();
                         break;
                     case R.id.radioButtonRoom:
                         viewPager.setCurrentItem(1);
                         radioButtonDevices.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
                         radioButtonRoom.setTextSize(TypedValue.COMPLEX_UNIT_SP, 24);
+                        roomAdapter.notifyDataSetChanged();
                         break;
                 }
             }

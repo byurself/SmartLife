@@ -51,7 +51,7 @@ public class RoomList {
                 JSONObject jsonObject = JSONObject.parseObject(response);
                 JSONArray arrays = jsonObject.getJSONArray("data");
 
-                rooms.removeAll(rooms);
+                rooms.clear();
 
                 for (int i = 0; i < arrays.size(); i++) {
                     String s = arrays.get(i) + "";

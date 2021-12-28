@@ -1,6 +1,8 @@
 package com.lpc.smartlife.adapter;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,8 +13,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.alibaba.fastjson.JSONObject;
 import com.lpc.smartlife.R;
+import com.lpc.smartlife.entity.DeviceList;
 import com.lpc.smartlife.entity.Room;
+import com.lpc.smartlife.utils.MyHttpConnection;
 
 import java.util.List;
 
@@ -51,11 +56,51 @@ public class RoomAdapter extends RecyclerView.Adapter<RoomAdapter.VH> {
     @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
     public void onBindViewHolder(@NonNull RoomAdapter.VH holder, int position) {
+        int a = position;
+
         if (holder == null)
             return;
 
         holder.textViewRoomName.setText(mRoom.get(position).getRoomName());
         holder.textViewRoomDeviceCount.setText(mRoom.get(position).getDeviceCount() + "个设备");
+
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setMessage("是否删除？");
+                builder.setPositiveButton("删除", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        // 删除设备
+                        deleteRoom(mRoom.get(a).getRoomId());
+
+                        mRoom.remove(mRoom.get(a));
+
+                        notifyDataSetChanged();
+                    }
+                });
+                builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                    }
+                });
+                builder.show();
+                return false;
+            }
+        });
+    }
+
+    public void deleteRoom(Integer roomId){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                MyHttpConnection conn = new MyHttpConnection();
+                JSONObject json = new JSONObject();
+                json.put("roomId", roomId);
+                String response = conn.myPost("/deleteRoom", json);
+            }
+        }).start();
     }
 
     @Override

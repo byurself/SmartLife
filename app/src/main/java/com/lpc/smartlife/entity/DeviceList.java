@@ -3,7 +3,10 @@ package com.lpc.smartlife.entity;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.lpc.smartlife.adapter.DeviceAdapter;
 import com.lpc.smartlife.utils.MyHttpConnection;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -39,7 +42,7 @@ public class DeviceList {
                 JSONObject jsonObject = JSONObject.parseObject(response);
                 JSONArray arrays = jsonObject.getJSONArray("data");
 
-                devices.removeAll(devices);
+                devices.clear();
 
                 for (int i = 0; i < arrays.size(); i++) {
                     String s = arrays.get(i) + "";

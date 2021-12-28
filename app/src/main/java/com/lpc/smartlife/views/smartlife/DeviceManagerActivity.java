@@ -53,7 +53,6 @@ public class DeviceManagerActivity extends BaseActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        initRoomRecyclerView();
         EventBus.getDefault().register(this);
     }
 
@@ -83,6 +82,8 @@ public class DeviceManagerActivity extends BaseActivity {
 
         LayoutInflater inflater = getLayoutInflater().from(this);
         room = inflater.inflate(R.layout.room_layout, null);
+
+        initRoomRecyclerView();
     }
 
     public void showDialog(View view) {

@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="360dp"
+    android:layout_width="320dp"
     android:layout_height="80dp"
     android:layout_gravity="center_horizontal"
     android:background="@drawable/room_background"
@@ -22,8 +22,8 @@
             android:layout_marginTop="5dp"
             android:layout_marginLeft="20dp"
             android:text="卧室"
-            android:textSize="24sp"
-            android:textStyle="bold" />
+            android:textColor="@color/black"
+            android:textSize="24sp" />
 
         <TextView
             android:id="@+id/textViewRoomDeviceCount"

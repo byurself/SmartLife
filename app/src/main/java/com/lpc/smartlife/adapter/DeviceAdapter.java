@@ -69,6 +69,7 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.VH> {
         holder.tvDeviceName.setText(mDevice.get(position).getDeviceName());
         holder.ivDevice.setImageDrawable(this.context.getDrawable(mDevice.get(position).getDeviceImageId()));
         textViewDeviceCount.setText(DeviceList.deviceList.getCount() + "个设备");
+
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
@@ -77,10 +78,10 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.VH> {
                 builder.setPositiveButton("删除", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        mDevice.remove(mDevice.get(a));
-
                         // 删除设备
                         deleteDevice(mDevice.get(a).getDeviceId());
+
+                        mDevice.remove(mDevice.get(a));
 
                         notifyDataSetChanged();
                     }
@@ -94,7 +95,6 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.VH> {
                 return false;
             }
         });
-
     }
 
     @Override
