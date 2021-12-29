@@ -40,7 +40,7 @@ public class DeviceList {
                 break;
             }
         }
-        RoomList.roomList.removeRoom(roomId);
+        RoomList.roomList.removeRoomCount(roomId,1);
     }
 
     public List<Device> httpGetDeviceList() {

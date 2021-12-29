@@ -40,10 +40,10 @@ public class RoomList {
         rooms.add(room);
     }
 
-    public void removeRoom(Integer roomId) {
+    public void removeRoomCount(Integer roomId, int reduceCount) {
         for (int i = 0; i < rooms.size(); i++) {
             if (rooms.get(i).getRoomId() == roomId) {
-                rooms.get(i).setDeviceCount(rooms.get(i).getDeviceCount() - 1);
+                rooms.get(i).setDeviceCount(rooms.get(i).getDeviceCount() - reduceCount);
                 break;
             }
         }

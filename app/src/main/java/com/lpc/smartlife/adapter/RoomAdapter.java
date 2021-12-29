@@ -20,6 +20,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.lpc.smartlife.R;
 import com.lpc.smartlife.entity.DeviceList;
 import com.lpc.smartlife.entity.Room;
+import com.lpc.smartlife.entity.RoomList;
 import com.lpc.smartlife.utils.MyHttpConnection;
 import com.lpc.smartlife.views.smartlife.RoomDeviceActivity;
 
@@ -94,7 +95,7 @@ public class RoomAdapter extends RecyclerView.Adapter<RoomAdapter.VH> {
                     builder.setPositiveButton("删除", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            // 删除设备
+                            // 删除房间
                             deleteRoom(mRoom.get(a).getRoomId());
 
                             mRoom.remove(mRoom.get(a));
@@ -121,6 +122,7 @@ public class RoomAdapter extends RecyclerView.Adapter<RoomAdapter.VH> {
                 MyHttpConnection conn = new MyHttpConnection();
                 JSONObject json = new JSONObject();
                 json.put("roomId", roomId);
+                DeviceList.deviceList.httpGetDeviceList();
                 String response = conn.myPost("/deleteRoom", json);
             }
         }).start();
