@@ -31,7 +31,19 @@ public class DeviceList {
         devices.add(device);
     }
 
-    public List<Device> getDeviceList() {
+    public void remove(int deviceId) {
+        int roomId = 0;
+        for (int i = 0; i < devices.size(); i++) {
+            if (devices.get(i).getDeviceId() == deviceId) {
+                roomId = devices.get(i).getRoomId();
+                devices.remove(i);
+                break;
+            }
+        }
+        RoomList.roomList.removeRoom(roomId);
+    }
+
+    public List<Device> httpGetDeviceList() {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -62,6 +74,15 @@ public class DeviceList {
         return devices;
     }
 
+    public List<Device> getListByRoomId(int roomId) {
+        List<Device> items = new ArrayList<>();
+        for (int i = 0; i < devices.size(); i++) {
+            if (devices.get(i).getRoomId() == roomId)
+                items.add(devices.get(i));
+        }
+        return items;
+    }
+
     public void setDeviceList(List<Device> devices) {
         this.devices = devices;
     }
@@ -84,18 +105,20 @@ public class DeviceList {
 
                 devices.clear();
 
-                for (int i = 0; i < arrays.size(); i++) {
-                    String s = arrays.get(i) + "";
-                    JSONObject object = JSON.parseObject(s);
-                    Device device = new Device(
-                            object.getInteger("deviceId"),
-                            object.getString("deviceName"),
-                            object.getInteger("deviceImageId"),
-                            object.getInteger("roomId"),
-                            object.getString("userId"),
-                            object.getInteger("isConnected"));
+                if (arrays != null) {
+                    for (int i = 0; i < arrays.size(); i++) {
+                        String s = arrays.get(i) + "";
+                        JSONObject object = JSON.parseObject(s);
+                        Device device = new Device(
+                                object.getInteger("deviceId"),
+                                object.getString("deviceName"),
+                                object.getInteger("deviceImageId"),
+                                object.getInteger("roomId"),
+                                object.getString("userId"),
+                                object.getInteger("isConnected"));
 
-                    DeviceList.deviceList.addDevice(device);
+                        DeviceList.deviceList.addDevice(device);
+                    }
                 }
             }
         }).start();

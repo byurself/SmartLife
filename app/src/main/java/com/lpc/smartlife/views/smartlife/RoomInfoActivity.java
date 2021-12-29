@@ -43,7 +43,7 @@ public class RoomInfoActivity extends BaseActivity {
         super.onStart();
         tvUsersHome.setText(User.user.getUserName());
         tvEditUser.setText(User.user.getUserName());
-        tvEditDeviceCount.setText(DeviceList.deviceList.getDeviceList().size() + "个设备");
+        tvEditDeviceCount.setText(DeviceList.deviceList.httpGetDeviceList().size() + "个设备");
     }
 
     public void init() {
@@ -51,9 +51,9 @@ public class RoomInfoActivity extends BaseActivity {
         tvUsersHome = findViewById(R.id.tvUsersHome);
         tvEditUser = findViewById(R.id.tvEditUser);
         tvEditDeviceCount = findViewById(R.id.tvEditDeviceCount);
-        ivEditUser = findViewById(R.id.ivEditUser);
+        ivEditUser = findViewById(R.id.ivEditRoomName);
         ivEditDeviceCount = findViewById(R.id.ivEditDeviceCount);
-        homeName = findViewById(R.id.homeName);
+        homeName = findViewById(R.id.roomName);
         deviceManager = findViewById(R.id.deviceManager);
 
         imageButtonBack.setOnClickListener(new View.OnClickListener() {

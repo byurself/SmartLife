@@ -20,6 +20,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.lpc.smartlife.R;
 import com.lpc.smartlife.entity.Device;
 import com.lpc.smartlife.entity.DeviceList;
+import com.lpc.smartlife.entity.RoomList;
 import com.lpc.smartlife.utils.MyHttpConnection;
 import com.lpc.smartlife.views.smartlife.RoomDeviceActivity;
 
@@ -73,7 +74,9 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.VH> {
 
         holder.tvDeviceName.setText(mDevice.get(a).getDeviceName());
         holder.ivDevice.setImageDrawable(this.context.getDrawable(mDevice.get(position).getDeviceImageId()));
-        textViewDeviceCount.setText(DeviceList.deviceList.getCount() + "个设备");
+        if (textViewDeviceCount != null) {
+            textViewDeviceCount.setText(DeviceList.deviceList.getCount() + "个设备");
+        }
 
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
@@ -89,6 +92,11 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.VH> {
                         mDevice.remove(mDevice.get(a));
 
                         notifyDataSetChanged();
+                        if (textViewDeviceCount != null) {
+                            textViewDeviceCount.setText(DeviceList.deviceList.getCount() + "个设备");
+                        }
+                        if (layoutId == R.layout.room_device)
+                            roomInfo.estimateEquipment();
                     }
                 });
                 builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -114,6 +122,7 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.VH> {
                 MyHttpConnection conn = new MyHttpConnection();
                 JSONObject json = new JSONObject();
                 json.put("deviceId", deviceId);
+                DeviceList.deviceList.remove(deviceId);
                 String response = conn.myPost("/deleteDevice", json);
             }
         }).start();

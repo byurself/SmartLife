@@ -6,6 +6,55 @@
     android:layout_height="match_parent"
     tools:context=".views.smartlife.RoomDeviceActivity">
 
+    <LinearLayout
+        android:id="@+id/editRoomName"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="8dp"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ibBacktoDeviceManager">
+
+        <TextView
+            android:id="@+id/tvRoomName"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:gravity="center"
+            android:text="房间名称"
+            android:textColor="@color/black"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/tvEditRoomName"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="200dp"
+            android:layout_marginRight="10dp"
+            android:gravity="center"
+            android:text="卧室"
+            android:textSize="16sp" />
+
+        <ImageView
+            android:id="@+id/ivEditRoomName"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="center"
+            app:srcCompat="@mipmap/grey_right" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/ivAddRoomDevice"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="24dp"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_RoomName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tv_RoomName"
+        app:srcCompat="@mipmap/add_black" />
+
     <ImageButton
         android:id="@+id/ibBacktoDeviceManager"
         android:layout_width="48dp"
@@ -25,7 +74,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:text="IF、的家"
+        android:text="卧室"
         android:textColor="@color/black"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="@+id/ibBacktoDeviceManager"
@@ -37,21 +86,37 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvRoomDeviceCount" />
+        app:layout_constraintTop_toBottomOf="@+id/editRoomName" />
 
-    <TextView
-        android:id="@+id/tvRoomDeviceCount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:text="2个设备"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ibBacktoDeviceManager" />
+    <LinearLayout
+        android:layout_width="100dp"
+        android:layout_height="120dp"
+        android:layout_marginBottom="304dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageView
+            android:id="@+id/ivNoDevice"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_gravity="center"
+            app:srcCompat="@mipmap/no_device" />
+
+        <TextView
+            android:id="@+id/tvNoDevice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="没有设备"
+            android:layout_marginTop="10dp"
+            android:textSize="16sp" />
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

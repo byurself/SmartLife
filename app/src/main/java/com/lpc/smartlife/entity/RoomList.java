@@ -33,11 +33,20 @@ public class RoomList {
         return String.valueOf(rooms.size());
     }
 
-    public void addRoom(Room room){
+    public void addRoom(Room room) {
         if (room == null) {
             return;
         }
         rooms.add(room);
+    }
+
+    public void removeRoom(Integer roomId) {
+        for (int i = 0; i < rooms.size(); i++) {
+            if (rooms.get(i).getRoomId() == roomId) {
+                rooms.get(i).setDeviceCount(rooms.get(i).getDeviceCount() - 1);
+                break;
+            }
+        }
     }
 
     public void getRoomList() {

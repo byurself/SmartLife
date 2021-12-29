@@ -53,6 +53,7 @@ public class DeviceManagerActivity extends BaseActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        roomAdapter.notifyDataSetChanged();
         EventBus.getDefault().register(this);
     }
 

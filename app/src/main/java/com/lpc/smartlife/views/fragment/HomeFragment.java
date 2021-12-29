@@ -1,7 +1,6 @@
 package com.lpc.smartlife.views.fragment;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.TypedValue;
@@ -151,6 +150,7 @@ public class HomeFragment extends Fragment {
             public void onPageSelected(int position) {
                 indexRadioGroup.check(indexRadioGroup.getChildAt(position).getId());
                 deviceAdapter.notifyDataSetChanged();
+                roomAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -183,7 +183,7 @@ public class HomeFragment extends Fragment {
     public void initDeviceRecyclerView(View root) {
         rvDevice = root.findViewById(R.id.rvDevice);
 
-        deviceAdapter = new DeviceAdapter(root.getContext(), DeviceList.deviceList.getDeviceList(), R.layout.device, textViewDeviceCount, null);
+        deviceAdapter = new DeviceAdapter(root.getContext(), DeviceList.deviceList.httpGetDeviceList(), R.layout.device, textViewDeviceCount, null);
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(root.getContext(), 2, GridLayoutManager.VERTICAL, false);
 
