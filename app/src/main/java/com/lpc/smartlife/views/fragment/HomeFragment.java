@@ -74,6 +74,7 @@ public class HomeFragment extends Fragment {
     public void onStart() {
         super.onStart();
         textViewUserHome.setText(User.user.getUserName());
+        textViewDeviceCount.setText(DeviceList.deviceList.getCount() + "个设备");
         deviceAdapter.notifyDataSetChanged();
         roomAdapter.notifyDataSetChanged();
     }
@@ -182,7 +183,7 @@ public class HomeFragment extends Fragment {
     public void initDeviceRecyclerView(View root) {
         rvDevice = root.findViewById(R.id.rvDevice);
 
-        deviceAdapter = new DeviceAdapter(root.getContext(), DeviceList.deviceList.getDeviceList(), textViewDeviceCount);
+        deviceAdapter = new DeviceAdapter(root.getContext(), DeviceList.deviceList.getDeviceList(), R.layout.device, textViewDeviceCount, null);
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(root.getContext(), 2, GridLayoutManager.VERTICAL, false);
 

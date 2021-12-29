@@ -21,6 +21,7 @@ import com.lpc.smartlife.R;
 import com.lpc.smartlife.entity.Device;
 import com.lpc.smartlife.entity.DeviceList;
 import com.lpc.smartlife.utils.MyHttpConnection;
+import com.lpc.smartlife.views.smartlife.RoomDeviceActivity;
 
 import java.util.List;
 
@@ -32,11 +33,15 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.VH> {
     private List<Device> mDevice;
     private Context context;
     private TextView textViewDeviceCount;
+    private int layoutId;
+    private RoomDeviceActivity roomInfo;
 
-    public DeviceAdapter(Context context, List<Device> mDevice, TextView textViewDeviceCount) {
+    public DeviceAdapter(Context context, List<Device> mDevice, int layoutId, TextView textViewDeviceCount, RoomDeviceActivity roomInfo) {
         this.mDevice = mDevice;
         this.context = context;
         this.textViewDeviceCount = textViewDeviceCount;
+        this.layoutId = layoutId;
+        this.roomInfo = roomInfo;
     }
 
     public static class VH extends RecyclerView.ViewHolder {
@@ -54,7 +59,7 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.VH> {
     @Override
     public DeviceAdapter.VH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View view = inflater.inflate(R.layout.device, parent, false);
+        View view = inflater.inflate(layoutId, parent, false);
         return new DeviceAdapter.VH(view);
     }
 
@@ -66,7 +71,7 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.VH> {
         if (holder == null)
             return;
 
-        holder.tvDeviceName.setText(mDevice.get(position).getDeviceName());
+        holder.tvDeviceName.setText(mDevice.get(a).getDeviceName());
         holder.ivDevice.setImageDrawable(this.context.getDrawable(mDevice.get(position).getDeviceImageId()));
         textViewDeviceCount.setText(DeviceList.deviceList.getCount() + "个设备");
 

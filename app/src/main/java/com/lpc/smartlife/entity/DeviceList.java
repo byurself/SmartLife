@@ -69,4 +69,36 @@ public class DeviceList {
     public String getCount() {
         return String.valueOf(devices.size());
     }
+
+    public List<Device> getDeviceListByUserIdAndRoomId(int roomId) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                MyHttpConnection conn = new MyHttpConnection();
+                JSONObject json = new JSONObject();
+                json.put("userId", User.user.getUserId());
+                json.put("roomId", roomId);
+                String response = conn.myPost("/getDeviceListByUserIdAndRoomId", json);
+                JSONObject jsonObject = JSONObject.parseObject(response);
+                JSONArray arrays = jsonObject.getJSONArray("data");
+
+                devices.clear();
+
+                for (int i = 0; i < arrays.size(); i++) {
+                    String s = arrays.get(i) + "";
+                    JSONObject object = JSON.parseObject(s);
+                    Device device = new Device(
+                            object.getInteger("deviceId"),
+                            object.getString("deviceName"),
+                            object.getInteger("deviceImageId"),
+                            object.getInteger("roomId"),
+                            object.getString("userId"),
+                            object.getInteger("isConnected"));
+
+                    DeviceList.deviceList.addDevice(device);
+                }
+            }
+        }).start();
+        return devices;
+    }
 }

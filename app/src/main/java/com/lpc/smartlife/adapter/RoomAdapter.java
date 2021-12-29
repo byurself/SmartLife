@@ -3,7 +3,9 @@ package com.lpc.smartlife.adapter;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Build;
+import android.os.Bundle;
 import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +21,7 @@ import com.lpc.smartlife.R;
 import com.lpc.smartlife.entity.DeviceList;
 import com.lpc.smartlife.entity.Room;
 import com.lpc.smartlife.utils.MyHttpConnection;
+import com.lpc.smartlife.views.smartlife.RoomDeviceActivity;
 
 import java.util.List;
 
@@ -66,6 +69,21 @@ public class RoomAdapter extends RecyclerView.Adapter<RoomAdapter.VH> {
 
         holder.textViewRoomName.setText(mRoom.get(position).getRoomName());
         holder.textViewRoomDeviceCount.setText(mRoom.get(position).getDeviceCount() + "个设备");
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(), RoomDeviceActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putInt("roomId", mRoom.get(a).getRoomId());
+                bundle.putString("roomName", mRoom.get(a).getRoomName());
+                bundle.putString("deviceCount", String.valueOf(mRoom.get(a).getDeviceCount()));
+                bundle.putString("userId", mRoom.get(a).getUserId());
+                bundle.putInt("index", a);
+                intent.putExtras(bundle);
+                view.getContext().startActivity(intent);
+            }
+        });
 
         if (layoutId == 1) {
             holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
