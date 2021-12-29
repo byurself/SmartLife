@@ -62,7 +62,7 @@ public class DeviceManagerActivity extends BaseActivity {
         EventBus.getDefault().unregister(this);
     }
 
-    public void init(){
+    public void init() {
         ibBackToRoomInfo = findViewById(R.id.ibBackToRoomInfo);
         ivAddRoom = findViewById(R.id.ivAddRoom);
 
@@ -110,7 +110,7 @@ public class DeviceManagerActivity extends BaseActivity {
         }
     };
 
-    public void addRoom(){
+    public void addRoom() {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -127,8 +127,8 @@ public class DeviceManagerActivity extends BaseActivity {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void handle(String msg){
-        if ("success".equals(msg)){
+    public void handle(String msg) {
+        if ("success".equals(msg)) {
             roomAdapter.notifyDataSetChanged();
         }
     }
@@ -140,7 +140,7 @@ public class DeviceManagerActivity extends BaseActivity {
         rvDeviceManager.setLayoutManager(manager);
         // 设置适配器
         RoomList.roomList.getRoomList();
-        roomAdapter = new RoomAdapter(this, RoomList.roomList.getRooms());
+        roomAdapter = new RoomAdapter(this, RoomList.roomList.getRooms(), 1);
         rvDeviceManager.setAdapter(roomAdapter);
         // 设置分割线
         rvDeviceManager.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));

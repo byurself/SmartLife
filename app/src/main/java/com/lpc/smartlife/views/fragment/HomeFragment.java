@@ -198,7 +198,7 @@ public class HomeFragment extends Fragment {
         rvRoom.setLayoutManager(manager);
         // 设置适配器
         RoomList.roomList.getRoomList();
-        roomAdapter = new RoomAdapter(root.getContext(), RoomList.roomList.getRooms());
+        roomAdapter = new RoomAdapter(root.getContext(), RoomList.roomList.getRooms(), R.layout.room);
         rvRoom.setAdapter(roomAdapter);
         // 设置分割线
         rvRoom.addItemDecoration(new DividerItemDecoration(root.getContext(), DividerItemDecoration.VERTICAL));

@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Build;
+import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,10 +29,12 @@ import java.util.List;
 public class RoomAdapter extends RecyclerView.Adapter<RoomAdapter.VH> {
     private List<Room> mRoom;
     private Context context;
+    private int layoutId;
 
-    public RoomAdapter(Context context, List<Room> mRoom) {
+    public RoomAdapter(Context context, List<Room> mRoom, int layoutId) {
         this.mRoom = mRoom;
         this.context = context;
+        this.layoutId = layoutId;
     }
 
     public static class VH extends RecyclerView.ViewHolder {
@@ -64,34 +67,36 @@ public class RoomAdapter extends RecyclerView.Adapter<RoomAdapter.VH> {
         holder.textViewRoomName.setText(mRoom.get(position).getRoomName());
         holder.textViewRoomDeviceCount.setText(mRoom.get(position).getDeviceCount() + "个设备");
 
-        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                builder.setMessage("是否删除？");
-                builder.setPositiveButton("删除", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        // 删除设备
-                        deleteRoom(mRoom.get(a).getRoomId());
+        if (layoutId == 1) {
+            holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    builder.setMessage("是否删除？");
+                    builder.setPositiveButton("删除", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            // 删除设备
+                            deleteRoom(mRoom.get(a).getRoomId());
 
-                        mRoom.remove(mRoom.get(a));
+                            mRoom.remove(mRoom.get(a));
 
-                        notifyDataSetChanged();
-                    }
-                });
-                builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                    }
-                });
-                builder.show();
-                return false;
-            }
-        });
+                            notifyDataSetChanged();
+                        }
+                    });
+                    builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                        }
+                    });
+                    builder.show();
+                    return false;
+                }
+            });
+        }
     }
 
-    public void deleteRoom(Integer roomId){
+    public void deleteRoom(Integer roomId) {
         new Thread(new Runnable() {
             @Override
             public void run() {
