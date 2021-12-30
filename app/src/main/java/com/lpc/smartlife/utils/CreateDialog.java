@@ -7,10 +7,20 @@ import android.view.Display;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.lpc.smartlife.R;
+import com.lpc.smartlife.adapter.ConnectDeviceAdapter;
+import com.lpc.smartlife.entity.Device;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author byu_rself
@@ -25,6 +35,10 @@ public class CreateDialog extends Dialog {
     public Button bt_cancel;
     public Button bt_confirm;
     public EditText et_home_name;
+    public RecyclerView recyclerView;
+    public List<Device> devices;
+    public ConnectDeviceAdapter connectDeviceAdapter;
+    public String deviceName;
 
     private String roomName;
     private int layout_id;
@@ -60,12 +74,33 @@ public class CreateDialog extends Dialog {
         dialogWindow.setAttributes(p);
 
         // 根据id在布局中找到控件对象
-        bt_cancel = findViewById(R.id.bt_cancel);
-        bt_confirm = findViewById(R.id.bt_confirm);
-        et_home_name = findViewById(R.id.et_home_name);
-        this.et_home_name.setText(roomName);
+        bt_cancel = findViewById(R.id.btCancel);
+        bt_confirm = findViewById(R.id.btConfirm);
+
+        if (layout_id == R.layout.connect_dialog) {
+            initRecyclerView();
+        } else {
+            et_home_name = findViewById(R.id.et_home_name);
+            this.et_home_name.setText(roomName);
+        }
         // 为按钮绑定点击事件监听器
         bt_cancel.setOnClickListener(mClickListener_cancel);
         bt_confirm.setOnClickListener(mClickListener_confirm);
+    }
+
+    private void initRecyclerView() {
+        recyclerView = findViewById(R.id.rvConnect);
+
+        devices = new ArrayList<>();
+
+        connectDeviceAdapter = new ConnectDeviceAdapter(context, devices, R.layout.connect_device);
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
+
+        recyclerView.setLayoutManager(linearLayoutManager);
+
+        recyclerView.setAdapter(connectDeviceAdapter);
+
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
     }
 }

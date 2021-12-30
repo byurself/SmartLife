@@ -63,6 +63,14 @@ public class RoomList {
         }).start();
     }
 
+    public int getIndex(int roomId) {
+        for (int i = 0; i < rooms.size(); i++) {
+            if (roomId == rooms.get(i).getRoomId())
+                return i;
+        }
+        return 0;
+    }
+
     public void getRoomList() {
         new Thread(new Runnable() {
             @Override

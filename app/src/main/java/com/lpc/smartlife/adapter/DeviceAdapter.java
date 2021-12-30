@@ -37,6 +37,7 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.VH> {
     private int layoutId;
     private RoomDeviceActivity roomInfo;
 
+
     public DeviceAdapter(Context context, List<Device> mDevice, int layoutId, TextView textViewDeviceCount, RoomDeviceActivity roomInfo) {
         this.mDevice = mDevice;
         this.context = context;

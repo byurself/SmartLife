@@ -19,8 +19,12 @@ import com.lpc.smartlife.entity.Device;
 import com.lpc.smartlife.entity.DeviceList;
 import com.lpc.smartlife.entity.Room;
 import com.lpc.smartlife.entity.RoomList;
+import com.lpc.smartlife.message.CommunityMessageEvent;
 import com.lpc.smartlife.utils.CreateDialog;
 import com.lpc.smartlife.utils.Tools;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
@@ -32,7 +36,7 @@ public class RoomDeviceActivity extends BaseActivity {
 
     ImageButton ibBacktoDeviceManager;
     TextView tv_RoomName;
-    ImageView ivAddRoom;
+    ImageView ivAddRoomDevice;
     ImageView ivNoDevice;
     TextView tvNoDevice;
     TextView tvEditRoomName;
@@ -70,7 +74,7 @@ public class RoomDeviceActivity extends BaseActivity {
     public void init() {
         ibBacktoDeviceManager = findViewById(R.id.ibBacktoDeviceManager);
         tv_RoomName = findViewById(R.id.tv_RoomName);
-        ivAddRoom = findViewById(R.id.ivAddRoom);
+        ivAddRoomDevice = findViewById(R.id.ivAddRoomDevice);
         ivNoDevice = findViewById(R.id.ivNoDevice);
         tvNoDevice = findViewById(R.id.tvNoDevice);
         tvEditRoomName = findViewById(R.id.tvEditRoomName);
@@ -82,12 +86,12 @@ public class RoomDeviceActivity extends BaseActivity {
         initRoomDeviceRecyclerView();
         estimateEquipment();
 
-//        ivAddRoom.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//            }
-//        });
+        ivAddRoomDevice.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showConnectDialog();
+            }
+        });
 
         editRoomName.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -131,6 +135,77 @@ public class RoomDeviceActivity extends BaseActivity {
             }
         }
     };
+
+    public void showConnectDialog() {
+        createDialog = new CreateDialog(this, R.layout.connect_dialog, R.style.dialog, onClickListenerCancel, onClickListenerConnect, "");
+        createDialog.show();
+    }
+
+
+    private View.OnClickListener onClickListenerConnect = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            int n = 0, p = 0;
+            Device device = new Device(null, "ESP32", 2, room.getRoomId(), room.getUserId(), 0);
+            // 判断是否只连接一个设备
+            for (int i = 0; i < createDialog.devices.size(); i++) {
+                if (createDialog.devices.get(i).isCheck()) {
+                    n++;
+                    p = i;
+                }
+                if (n > 1) {
+                    Tools.displayToast(view.getContext(), "一次只能连接一个设备");
+                    return;
+                }
+            }
+            // 如果没有选择的设备直接关闭对话框
+            if (n == 0) {
+                createDialog.cancel();
+                return;
+            }
+            // 判断该设备是否已经存在在房间中
+            if (isConnect(createDialog.devices.get(p), deviceList)) {
+                device.setMacAddress(createDialog.devices.get(p).getMacAddress());
+                deviceList.add(device);
+                DeviceList.deviceList.add(device);
+                Tools.displayToast(view.getContext(), "添加成功");
+                estimateEquipment();
+                deviceAdapter.notifyDataSetChanged();
+                createDialog.cancel();
+            } else {
+                Tools.displayToast(view.getContext(), "设备已存在");
+            }
+        }
+
+    };
+
+    public boolean isConnect(Device device, List<Device> devices) {
+        for (int i = 0; i < devices.size(); i++) {
+            if (device.getMacAddress().equals(devices.get(i).getMacAddress()))
+                return false;
+        }
+        return true;
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void handleUDPReceive(CommunityMessageEvent msg) {
+
+        switch (msg.getCode()) {
+            case CommunityMessageEvent.ClearText:
+                break;
+            case CommunityMessageEvent.UDPDataMessage:
+                Device device = new Device(null,"ESP32", 2, room.getRoomId(), room.getUserId(),0);
+                device.setMacAddress(msg.getMessage().split("\n")[0].replaceAll("\r",""));
+                if(isConnect(device,createDialog.devices)){
+                    createDialog.devices.add(device);
+                    createDialog.connectDeviceAdapter.notifyDataSetChanged();
+                }
+                break;
+            case CommunityMessageEvent.TCPDataMessage:
+                break;
+        }
+
+    }
 
     // 判断是否有设备,没有设备显示无设备的图片和文字，否则显示设备数量
     public void estimateEquipment() {

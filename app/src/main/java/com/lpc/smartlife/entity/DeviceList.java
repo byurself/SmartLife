@@ -40,7 +40,7 @@ public class DeviceList {
                 break;
             }
         }
-        RoomList.roomList.removeRoomCount(roomId,1);
+        RoomList.roomList.removeRoomCount(roomId, 1);
     }
 
     public List<Device> httpGetDeviceList() {
@@ -72,6 +72,29 @@ public class DeviceList {
             }
         }).start();
         return devices;
+    }
+
+    public void add(Device device) {
+        int index = RoomList.roomList.getIndex(device.getRoomId());
+        RoomList.roomList.getRooms().get(index).setDeviceCount(getListByRoomId(device.getRoomId()).size() + 1);
+        devices.add(device);
+        httpAddEquipment(device);
+    }
+
+    private void httpAddEquipment(Device device) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                MyHttpConnection coon = new MyHttpConnection();
+                JSONObject json = new JSONObject();
+                json.put("deviceName", device.getDeviceName());
+                json.put("deviceImageId", device.getDeviceImageId());
+                json.put("roomId", device.getRoomId());
+                json.put("userId", device.getUserId());
+                json.put("macAddress", device.getMacAddress());
+                String response = coon.doPost("/addDevice", json);
+            }
+        }).start();
     }
 
     public List<Device> getListByRoomId(int roomId) {

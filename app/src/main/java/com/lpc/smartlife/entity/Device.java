@@ -1,16 +1,24 @@
 package com.lpc.smartlife.entity;
 
+import com.lpc.smartlife.R;
+
 /**
  * @author byu_rself
  * @date 2021/12/26 20:37
  */
 public class Device {
+
+    public static final int FreeBuds3 = 1;
+    public static final int ESP32 = 2;
+
     private Integer deviceId;
     private String deviceName;
     private Integer deviceImageId;
     private Integer roomId;
     private String userId;
     private Integer isConnected;
+    private String macAddress;
+    private Boolean isCheck;
 
     public Device() {
     }
@@ -22,6 +30,26 @@ public class Device {
         this.roomId = roomId;
         this.userId = userId;
         this.isConnected = isConnected;
+    }
+
+    public Boolean isCheck() {
+        return isCheck;
+    }
+
+    public Boolean getCheck() {
+        return isCheck;
+    }
+
+    public void setCheck(Boolean check) {
+        isCheck = check;
+    }
+
+    public String getMacAddress() {
+        return macAddress;
+    }
+
+    public void setMacAddress(String macAddress) {
+        this.macAddress = macAddress;
     }
 
     public Integer getDeviceId() {
@@ -41,7 +69,13 @@ public class Device {
     }
 
     public Integer getDeviceImageId() {
-        return deviceImageId;
+        switch (deviceImageId){
+            case FreeBuds3:
+                return R.mipmap.freebuds3;
+            case ESP32:
+                return R.mipmap.esp32;
+        }
+        return 0;
     }
 
     public void setDeviceImageId(Integer deviceImageId) {
