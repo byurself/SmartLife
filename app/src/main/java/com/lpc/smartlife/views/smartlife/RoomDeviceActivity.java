@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.hxc.basemodule.BaseActivity;
@@ -17,7 +18,9 @@ import com.lpc.smartlife.adapter.DeviceAdapter;
 import com.lpc.smartlife.entity.Device;
 import com.lpc.smartlife.entity.DeviceList;
 import com.lpc.smartlife.entity.Room;
+import com.lpc.smartlife.entity.RoomList;
 import com.lpc.smartlife.utils.CreateDialog;
+import com.lpc.smartlife.utils.Tools;
 
 import java.util.List;
 
@@ -33,6 +36,7 @@ public class RoomDeviceActivity extends BaseActivity {
     ImageView ivNoDevice;
     TextView tvNoDevice;
     TextView tvEditRoomName;
+    LinearLayout editRoomName;
 
     RecyclerView rvRoomDevice;
     DeviceAdapter deviceAdapter;
@@ -70,6 +74,7 @@ public class RoomDeviceActivity extends BaseActivity {
         ivNoDevice = findViewById(R.id.ivNoDevice);
         tvNoDevice = findViewById(R.id.tvNoDevice);
         tvEditRoomName = findViewById(R.id.tvEditRoomName);
+        editRoomName = findViewById(R.id.editRoomName);
 
         tv_RoomName.setText(room.getRoomName());
         tvEditRoomName.setText(room.getRoomName());
@@ -84,6 +89,13 @@ public class RoomDeviceActivity extends BaseActivity {
 //            }
 //        });
 
+        editRoomName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDialog(view);
+            }
+        });
+
         ibBacktoDeviceManager.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -91,6 +103,34 @@ public class RoomDeviceActivity extends BaseActivity {
             }
         });
     }
+
+    public void showDialog(View view) {
+        createDialog = new CreateDialog(this, R.layout.edit_room_dialog, R.style.dialog, onClickListenerCancel, onClickListenerConfirm, tvEditRoomName.getText().toString().trim());
+        createDialog.show();
+    }
+
+    private View.OnClickListener onClickListenerCancel = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            createDialog.cancel();
+        }
+    };
+
+    private View.OnClickListener onClickListenerConfirm = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            if (createDialog.et_home_name.getText().toString().trim().length() == 0)
+                Tools.displayToast(view.getContext(), "房间名称不能为空");
+            else {
+                room.setRoomName(createDialog.et_home_name.getText().toString().trim());
+                RoomList.roomList.getRooms().get(index).setRoomName(room.getRoomName());
+                RoomList.roomList.httpUpdateRoomByRoomId(room);
+                tv_RoomName.setText(room.getRoomName());
+                tvEditRoomName.setText(room.getRoomName());
+                createDialog.cancel();
+            }
+        }
+    };
 
     // 判断是否有设备,没有设备显示无设备的图片和文字，否则显示设备数量
     public void estimateEquipment() {

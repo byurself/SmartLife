@@ -23,7 +23,7 @@ public class MyHttpConnection {
      * @param param json格式的参数
      * @return
      */
-    String header = "http://192.168.1.145:8090/api";
+    String header = "http://192.168.43.240:8090/api";
 
     public String myPost(String path, JSONObject param) {
         String result = "";

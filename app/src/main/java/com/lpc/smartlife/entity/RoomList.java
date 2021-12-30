@@ -49,6 +49,20 @@ public class RoomList {
         }
     }
 
+    public void httpUpdateRoomByRoomId(Room room) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                MyHttpConnection coon = new MyHttpConnection();
+                JSONObject json = new JSONObject();
+                json.put("roomId", room.getRoomId());
+                json.put("roomName", room.getRoomName());
+                json.put("userId", User.user.getUserId());
+                coon.myPost("/updateRoomByRoomId", json);
+            }
+        }).start();
+    }
+
     public void getRoomList() {
         new Thread(new Runnable() {
             @Override
