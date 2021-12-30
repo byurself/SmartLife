@@ -13,6 +13,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SmartLife">
         <activity
+            android:name=".views.smartlife.DeviceInfoActivity"
+            android:exported="true" />
+        <activity
             android:name=".views.smartlife.RoomDeviceActivity"
             android:exported="true" />
         <activity

@@ -20,9 +20,12 @@ import com.lpc.smartlife.entity.DeviceList;
 import com.lpc.smartlife.entity.Room;
 import com.lpc.smartlife.entity.RoomList;
 import com.lpc.smartlife.message.CommunityMessageEvent;
+import com.lpc.smartlife.utils.CommunityInterface;
 import com.lpc.smartlife.utils.CreateDialog;
 import com.lpc.smartlife.utils.Tools;
+import com.lpc.smartlife.utils.UDP;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -47,6 +50,8 @@ public class RoomDeviceActivity extends BaseActivity {
 
     CreateDialog createDialog;
 
+    CommunityInterface community;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,12 +68,21 @@ public class RoomDeviceActivity extends BaseActivity {
         );
         index = bundle.getInt("index");
 
+        community = UDP.getInstance("192.168.137.1", 9000);
+
         init();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
     public void init() {

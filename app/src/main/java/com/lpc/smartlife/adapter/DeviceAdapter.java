@@ -3,7 +3,9 @@ package com.lpc.smartlife.adapter;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Build;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +24,7 @@ import com.lpc.smartlife.entity.Device;
 import com.lpc.smartlife.entity.DeviceList;
 import com.lpc.smartlife.entity.RoomList;
 import com.lpc.smartlife.utils.MyHttpConnection;
+import com.lpc.smartlife.views.smartlife.DeviceInfoActivity;
 import com.lpc.smartlife.views.smartlife.RoomDeviceActivity;
 
 import java.util.List;
@@ -78,6 +81,19 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.VH> {
         if (textViewDeviceCount != null) {
             textViewDeviceCount.setText(DeviceList.deviceList.getCount() + "个设备");
         }
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(), DeviceInfoActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putInt("deviceImageId", mDevice.get(a).getDeviceImageId());
+                bundle.putString("deviceName", mDevice.get(a).getDeviceName());
+                bundle.putString("macAddress", mDevice.get(a).getMacAddress());
+                intent.putExtras(bundle);
+                view.getContext().startActivity(intent);
+            }
+        });
 
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
