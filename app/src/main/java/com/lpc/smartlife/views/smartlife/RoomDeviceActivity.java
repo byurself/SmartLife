@@ -70,13 +70,14 @@ public class RoomDeviceActivity extends BaseActivity {
 
         community = UDP.getInstance("192.168.137.1", 9000);
 
+        EventBus.getDefault().register(this);
+
         init();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        EventBus.getDefault().register(this);
     }
 
     @Override
