@@ -161,7 +161,9 @@ public class RoomDeviceActivity extends BaseActivity {
         @Override
         public void onClick(View view) {
             int n = 0, p = 0;
-            Device device = new Device(null, "ESP32", 2, room.getRoomId(), room.getUserId(), 0);
+            List<Device> httpGetDeviceList = DeviceList.deviceList.httpGetDeviceList();
+            int deviceId = httpGetDeviceList.get(httpGetDeviceList.size() - 1).getDeviceId() + 1;
+            Device device = new Device(deviceId, "ESP32", 2, room.getRoomId(), room.getUserId(), 0);
             // 判断是否只连接一个设备
             for (int i = 0; i < createDialog.devices.size(); i++) {
                 if (createDialog.devices.get(i).isCheck()) {
@@ -209,9 +211,11 @@ public class RoomDeviceActivity extends BaseActivity {
             case CommunityMessageEvent.ClearText:
                 break;
             case CommunityMessageEvent.UDPDataMessage:
-                Device device = new Device(null,"ESP32", 2, room.getRoomId(), room.getUserId(),0);
-                device.setMacAddress(msg.getMessage().split("\n")[0].replaceAll("\r",""));
-                if(isConnect(device,createDialog.devices)){
+                List<Device> httpGetDeviceList = DeviceList.deviceList.httpGetDeviceList();
+                int deviceId = httpGetDeviceList.get(httpGetDeviceList.size() - 1).getDeviceId() + 1;
+                Device device = new Device(deviceId, "ESP32", 2, room.getRoomId(), room.getUserId(), 0);
+                device.setMacAddress(msg.getMessage().split("\n")[0].replaceAll("\r", ""));
+                if (isConnect(device, createDialog.devices)) {
                     createDialog.devices.add(device);
                     createDialog.connectDeviceAdapter.notifyDataSetChanged();
                 }

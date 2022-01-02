@@ -9,21 +9,21 @@
 
     <ImageView
         android:id="@+id/imageView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.201"
-        app:srcCompat="@mipmap/qq" />
+        app:layout_constraintVertical_bias="0.156"
+        app:srcCompat="@mipmap/logo" />
 
     <EditText
         android:id="@+id/editTextAccount"
         android:layout_width="237dp"
         android:layout_height="48dp"
-        android:drawableStart="@mipmap/qq_small"
+        android:drawableStart="@mipmap/huawei"
         android:ems="10"
         android:hint="请输入账号"
         android:inputType="textPersonName"

@@ -84,16 +84,18 @@ public class RoomList {
 
                 rooms.clear();
 
-                for (int i = 0; i < arrays.size(); i++) {
-                    String s = arrays.get(i) + "";
-                    JSONObject object = JSON.parseObject(s);
-                    Room room = new Room(
-                            object.getInteger("roomId"),
-                            object.getString("roomName"),
-                            object.getInteger("deviceCount"),
-                            object.getString("userId"));
+                if (arrays != null && !arrays.isEmpty()) {
+                    for (int i = 0; i < arrays.size(); i++) {
+                        String s = arrays.get(i) + "";
+                        JSONObject object = JSON.parseObject(s);
+                        Room room = new Room(
+                                object.getInteger("roomId"),
+                                object.getString("roomName"),
+                                object.getInteger("deviceCount"),
+                                object.getString("userId"));
 
-                    RoomList.roomList.addRoom(room);
+                        RoomList.roomList.addRoom(room);
+                    }
                 }
             }
         }).start();

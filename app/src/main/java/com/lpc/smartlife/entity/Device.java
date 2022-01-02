@@ -114,6 +114,7 @@ public class Device {
                 ", deviceImageId=" + deviceImageId +
                 ", roomId=" + roomId +
                 ", userId='" + userId + '\'' +
+                ", macAddress='" + macAddress + '\'' +
                 ", isConnected=" + isConnected +
                 '}';
     }

@@ -256,7 +256,7 @@ public class ESP32Fragment extends Fragment {
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("cmd", "countDown" + DeviceInfoActivity.macAddress);
                 jsonObject.put("status", 1);
-                jsonObject.put("second", countDownSecond / 2);
+                jsonObject.put("second", countDownSecond);
                 jsonObject.put("command", 1);
                 MyMqttService.publish(jsonObject.toJSONString());
             }

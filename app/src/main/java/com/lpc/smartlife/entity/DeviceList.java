@@ -3,6 +3,7 @@ package com.lpc.smartlife.entity;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.lpc.smartlife.R;
 import com.lpc.smartlife.adapter.DeviceAdapter;
 import com.lpc.smartlife.utils.MyHttpConnection;
 
@@ -56,18 +57,21 @@ public class DeviceList {
 
                 devices.clear();
 
-                for (int i = 0; i < arrays.size(); i++) {
-                    String s = arrays.get(i) + "";
-                    JSONObject object = JSON.parseObject(s);
-                    Device device = new Device(
-                            object.getInteger("deviceId"),
-                            object.getString("deviceName"),
-                            object.getInteger("deviceImageId"),
-                            object.getInteger("roomId"),
-                            object.getString("userId"),
-                            object.getInteger("isConnected"));
+                if (arrays != null && !arrays.isEmpty()) {
+                    for (int i = 0; i < arrays.size(); i++) {
+                        String s = arrays.get(i) + "";
+                        JSONObject object = JSON.parseObject(s);
+                        Device device = new Device(
+                                object.getInteger("deviceId"),
+                                object.getString("deviceName"),
+                                object.getInteger("deviceImageId"),
+                                object.getInteger("roomId"),
+                                object.getString("userId"),
+                                object.getInteger("isConnected"));
+                        device.setMacAddress(object.getString("macAddress"));
 
-                    DeviceList.deviceList.addDevice(device);
+                        DeviceList.deviceList.addDevice(device);
+                    }
                 }
             }
         }).start();
@@ -78,21 +82,26 @@ public class DeviceList {
         int index = RoomList.roomList.getIndex(device.getRoomId());
         RoomList.roomList.getRooms().get(index).setDeviceCount(getListByRoomId(device.getRoomId()).size() + 1);
         devices.add(device);
-        httpAddEquipment(device);
+        httpAddDevice(device);
     }
 
-    private void httpAddEquipment(Device device) {
+    private void httpAddDevice(Device device) {
         new Thread(new Runnable() {
             @Override
             public void run() {
+                int deviceImageId = 1;
+                if (device.getDeviceImageId() == R.mipmap.esp32) {
+                    deviceImageId = 2;
+                }
                 MyHttpConnection coon = new MyHttpConnection();
                 JSONObject json = new JSONObject();
+                json.put("deviceId", device.getDeviceId());
                 json.put("deviceName", device.getDeviceName());
-                json.put("deviceImageId", device.getDeviceImageId());
+                json.put("deviceImageId", deviceImageId);
                 json.put("roomId", device.getRoomId());
                 json.put("userId", device.getUserId());
                 json.put("macAddress", device.getMacAddress());
-                String response = coon.doPost("/addDevice", json);
+                String response = coon.myPost("/addDevice", json);
             }
         }).start();
     }
